@@ -116,22 +116,64 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Main Interface */}
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Upload Interface */}
-          <div>
-            <h3 className="text-xl font-semibold text-foreground mb-4 animate-fade-in">
-              Interface 1: Upload de Documentos
-            </h3>
-            <FileUpload />
-          </div>
+        {/* Main Interface - Tabs */}
+        <section className="max-w-4xl mx-auto">
+          <div className="bg-card rounded-xl border border-border/50 shadow-lg animate-fade-in">
+            <div className="p-6">
+              <h3 className="text-2xl font-semibold text-foreground mb-6 text-center">
+                Processamento de Documentos PDF
+              </h3>
+              
+              {/* Tab Navigation */}
+              <div className="flex justify-center mb-8">
+                <div className="flex bg-muted/30 rounded-lg p-1 space-x-1">
+                  <button 
+                    className="px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 bg-primary text-primary-foreground shadow-sm"
+                  >
+                    1. Upload
+                  </button>
+                  <button 
+                    className="px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground"
+                  >
+                    2. Conversão
+                  </button>
+                  <button 
+                    className="px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground"
+                  >
+                    3. Download
+                  </button>
+                </div>
+              </div>
 
-          {/* Conversion Interface */}
-          <div>
-            <h3 className="text-xl font-semibold text-foreground mb-4 animate-fade-in" style={{ animationDelay: "100ms" }}>
-              Interface 2: Conversão e Download
-            </h3>
-            <ConversionInterface />
+              {/* Step Content */}
+              <div className="space-y-8">
+                {/* Step 1: Upload */}
+                <div className="animate-fade-in">
+                  <div className="text-center mb-6">
+                    <h4 className="text-lg font-semibold text-foreground mb-2">
+                      Faça o upload do seu documento PDF
+                    </h4>
+                    <p className="text-muted-foreground">
+                      Selecione ou arraste seu arquivo PDF para começar o processo
+                    </p>
+                  </div>
+                  <FileUpload />
+                </div>
+
+                {/* Step 2: Conversion */}
+                <div className="border-t border-border/50 pt-8">
+                  <div className="text-center mb-6">
+                    <h4 className="text-lg font-semibold text-foreground mb-2">
+                      Configure a conversão
+                    </h4>
+                    <p className="text-muted-foreground">
+                      Escolha o formato desejado e inicie a conversão
+                    </p>
+                  </div>
+                  <ConversionInterface />
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
