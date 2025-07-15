@@ -23,7 +23,11 @@ interface ConversionJob {
   downloadUrl?: string;
 }
 
-const ConversionInterface = () => {
+interface ConversionInterfaceProps {
+  onConversionComplete?: () => void;
+}
+
+const ConversionInterface = ({ onConversionComplete }: ConversionInterfaceProps) => {
   const [selectedFormat, setSelectedFormat] = useState<string>("");
   const [jobs, setJobs] = useState<ConversionJob[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -95,6 +99,11 @@ const ConversionInterface = () => {
     }
 
     setIsProcessing(false);
+    
+    // Call onConversionComplete callback
+    if (onConversionComplete) {
+      onConversionComplete();
+    }
   };
 
   const getStatusIcon = (status: ConversionJob["status"]) => {

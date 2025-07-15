@@ -12,6 +12,10 @@ import {
 } from "lucide-react";
 
 const Index = () => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [conversionComplete, setConversionComplete] = useState(false);
+  
   const [metrics, setMetrics] = useState({
     pdfsLoaded: 1247,
     processed: 1189,
@@ -116,66 +120,99 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Main Interface - Tabs */}
-        <section className="max-w-4xl mx-auto">
-          <div className="bg-card rounded-xl border border-border/50 shadow-lg animate-fade-in">
-            <div className="p-6">
-              <h3 className="text-2xl font-semibold text-foreground mb-6 text-center">
-                Processamento de Documentos PDF
-              </h3>
-              
-              {/* Tab Navigation */}
-              <div className="flex justify-center mb-8">
-                <div className="flex bg-muted/30 rounded-lg p-1 space-x-1">
-                  <button 
-                    className="px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 bg-primary text-primary-foreground shadow-sm"
-                  >
-                    1. Upload
-                  </button>
-                  <button 
-                    className="px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground"
-                  >
-                    2. Conversão
-                  </button>
-                  <button 
-                    className="px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 text-muted-foreground hover:text-foreground"
-                  >
-                    3. Download
-                  </button>
+        {/* Step 1: Upload */}
+        {currentStep === 1 && (
+          <section className="max-w-2xl mx-auto animate-fade-in">
+            <div className="bg-card rounded-xl border border-border/50 shadow-lg">
+              <div className="p-8 text-center">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-lg gradient-primary flex items-center justify-center">
+                  <FileText className="w-8 h-8 text-primary-foreground" />
                 </div>
+                <h3 className="text-2xl font-semibold text-foreground mb-4">
+                  Faça o upload do seu PDF
+                </h3>
+                <p className="text-muted-foreground mb-8">
+                  Selecione ou arraste seu arquivo PDF para começar a conversão
+                </p>
+                <FileUpload 
+                  onFileUpload={(file) => {
+                    setUploadedFile(file);
+                    setCurrentStep(2);
+                  }}
+                />
               </div>
+            </div>
+          </section>
+        )}
 
-              {/* Step Content */}
-              <div className="space-y-8">
-                {/* Step 1: Upload */}
-                <div className="animate-fade-in">
-                  <div className="text-center mb-6">
-                    <h4 className="text-lg font-semibold text-foreground mb-2">
-                      Faça o upload do seu documento PDF
-                    </h4>
-                    <p className="text-muted-foreground">
-                      Selecione ou arraste seu arquivo PDF para começar o processo
-                    </p>
+        {/* Step 2: Conversion */}
+        {currentStep === 2 && (
+          <section className="max-w-2xl mx-auto animate-fade-in">
+            <div className="bg-card rounded-xl border border-border/50 shadow-lg">
+              <div className="p-8">
+                <div className="text-center mb-8">
+                  <div className="w-16 h-16 mx-auto mb-6 rounded-lg gradient-secondary flex items-center justify-center">
+                    <Zap className="w-8 h-8 text-secondary-foreground" />
                   </div>
-                  <FileUpload />
+                  <h3 className="text-2xl font-semibold text-foreground mb-4">
+                    Configure a conversão
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Escolha o formato desejado e inicie a conversão do arquivo: <span className="font-medium text-foreground">{uploadedFile?.name}</span>
+                  </p>
                 </div>
-
-                {/* Step 2: Conversion */}
-                <div className="border-t border-border/50 pt-8">
-                  <div className="text-center mb-6">
-                    <h4 className="text-lg font-semibold text-foreground mb-2">
-                      Configure a conversão
-                    </h4>
-                    <p className="text-muted-foreground">
-                      Escolha o formato desejado e inicie a conversão
-                    </p>
-                  </div>
-                  <ConversionInterface />
+                <ConversionInterface 
+                  onConversionComplete={() => {
+                    setConversionComplete(true);
+                    setCurrentStep(3);
+                  }}
+                />
+                <div className="mt-6 text-center">
+                  <button
+                    onClick={() => setCurrentStep(1)}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    ← Voltar para upload
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
+
+        {/* Step 3: Download */}
+        {currentStep === 3 && conversionComplete && (
+          <section className="max-w-2xl mx-auto animate-fade-in">
+            <div className="bg-card rounded-xl border border-border/50 shadow-lg">
+              <div className="p-8 text-center">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-lg gradient-primary flex items-center justify-center">
+                  <CheckCircle className="w-8 h-8 text-primary-foreground" />
+                </div>
+                <h3 className="text-2xl font-semibold text-foreground mb-4">
+                  Conversão concluída!
+                </h3>
+                <p className="text-muted-foreground mb-8">
+                  Seu arquivo foi convertido com sucesso. Faça o download abaixo.
+                </p>
+                <div className="space-y-4">
+                  <button className="w-full bg-primary text-primary-foreground py-3 px-6 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                    Download do arquivo convertido
+                  </button>
+                  <button
+                    onClick={() => {
+                      setCurrentStep(1);
+                      setUploadedFile(null);
+                      setConversionComplete(false);
+                    }}
+                    className="w-full bg-secondary text-secondary-foreground py-3 px-6 rounded-lg font-medium hover:bg-secondary/90 transition-colors"
+                  >
+                    Converter novo arquivo
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Additional Features */}
         <section className="mt-16 text-center animate-fade-in" style={{ animationDelay: "400ms" }}>

@@ -13,7 +13,11 @@ interface UploadedFile {
   progress: number;
 }
 
-const FileUpload = () => {
+interface FileUploadProps {
+  onFileUpload?: (file: File) => void;
+}
+
+const FileUpload = ({ onFileUpload }: FileUploadProps) => {
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -61,6 +65,13 @@ const FileUpload = () => {
 
     setFiles(prev => [...prev, ...newFiles]);
     newFiles.forEach(file => simulateUpload(file.id));
+    
+    // Call onFileUpload callback with first file
+    if (newFiles.length > 0 && onFileUpload) {
+      // Create a mock File object since we're just simulating
+      const mockFile = new File([''], newFiles[0].name, { type: 'application/pdf' });
+      onFileUpload(mockFile);
+    }
   };
 
   const removeFile = (fileId: string) => {
