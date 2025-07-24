@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import MetricsCard from "@/components/MetricsCard";
 import FileUpload from "@/components/FileUpload";
 import ConversionInterface from "@/components/ConversionInterface";
+import SupportTicket from "@/components/SupportTicket";
 import { 
   FileText, 
   CheckCircle, 
@@ -52,9 +53,12 @@ const Index = () => {
                 <p className="text-sm text-muted-foreground">Sistema de Conversão Inteligente</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-secondary" />
-              <span className="text-sm text-muted-foreground">Seguro & Rápido</span>
+            <div className="flex items-center gap-4">
+              <SupportTicket />
+              <div className="flex items-center gap-2">
+                <Shield className="w-4 h-4 text-secondary" />
+                <span className="text-sm text-muted-foreground">Seguro & Rápido</span>
+              </div>
             </div>
           </div>
         </div>
