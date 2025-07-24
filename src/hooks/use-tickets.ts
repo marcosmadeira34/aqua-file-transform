@@ -62,6 +62,15 @@ export const useTickets = () => {
       updatedAt: new Date(),
     };
     setTickets(prev => [newTicket, ...prev]);
+    
+    // Simular envio de email (requer backend real)
+    console.log('Email enviado para suporte:', {
+      ticketId: newTicket.id,
+      subject: newTicket.subject,
+      description: newTicket.description,
+      priority: newTicket.priority
+    });
+    
     return newTicket;
   }, []);
 
