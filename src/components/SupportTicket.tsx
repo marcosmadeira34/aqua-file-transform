@@ -11,7 +11,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { useTickets } from "@/hooks/use-tickets";
 import { 
   HelpCircle, 
   Paperclip, 
@@ -24,9 +26,11 @@ const SupportTicket = () => {
   const [open, setOpen] = useState(false);
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState<'baixa' | 'media' | 'alta' | 'urgente'>('media');
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { createTicket } = useTickets();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
@@ -52,29 +56,27 @@ const SupportTicket = () => {
     setIsSubmitting(true);
 
     try {
-      // Aqui você fará a integração com o Django backend
-      // const formData = new FormData();
-      // formData.append('subject', subject);
-      // formData.append('description', description);
-      // attachedFiles.forEach(file => formData.append('attachments', file));
-      
-      // await fetch('/api/support-tickets/', {
-      //   method: 'POST',
-      //   body: formData,
-      // });
+      // Criar ticket usando o hook
+      const newTicket = createTicket({
+        subject,
+        description,
+        priority,
+        attachments: attachedFiles,
+      });
 
-      // Simulação de envio
+      // Simulação de envio para backend
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       toast({
         title: "Ticket criado com sucesso!",
-        description: "Sua solicitação foi enviada. Entraremos em contato em breve.",
+        description: `Ticket #${newTicket.id} foi criado. Acompanhe o status na área de tickets.`,
         variant: "default",
       });
 
       // Reset form
       setSubject("");
       setDescription("");
+      setPriority('media');
       setAttachedFiles([]);
       setOpen(false);
     } catch (error) {
@@ -133,6 +135,21 @@ const SupportTicket = () => {
               required
               className="min-h-[120px]"
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="priority">Prioridade</Label>
+            <Select value={priority} onValueChange={(value: 'baixa' | 'media' | 'alta' | 'urgente') => setPriority(value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione a prioridade" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="baixa">Baixa</SelectItem>
+                <SelectItem value="media">Média</SelectItem>
+                <SelectItem value="alta">Alta</SelectItem>
+                <SelectItem value="urgente">Urgente</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-2">

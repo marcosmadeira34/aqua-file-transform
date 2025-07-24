@@ -3,6 +3,7 @@ import MetricsCard from "@/components/MetricsCard";
 import FileUpload from "@/components/FileUpload";
 import ConversionInterface from "@/components/ConversionInterface";
 import SupportTicket from "@/components/SupportTicket";
+import TicketManagement from "@/components/TicketManagement";
 import { 
   FileText, 
   CheckCircle, 
@@ -54,7 +55,8 @@ const Index = () => {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <SupportTicket />
+            <SupportTicket />
+            <TicketManagement />
               <div className="flex items-center gap-2">
                 <Shield className="w-4 h-4 text-secondary" />
                 <span className="text-sm text-muted-foreground">Seguro & Rápido</span>
