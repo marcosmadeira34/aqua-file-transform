@@ -40,31 +40,24 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-full bg-background">
       {/* Header */}
-      <header className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-6 py-4">
+      <div className="border-b border-border/50 bg-card/30 mb-6">
+        <div className="px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg gradient-primary">
-                <Zap className="w-6 h-6 text-primary-foreground" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-primary">PDF Converter Pro</h1>
-                <p className="text-sm text-muted-foreground">Sistema de Conversão Inteligente</p>
-              </div>
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                Dashboard
+              </h1>
+              <p className="text-muted-foreground mt-1">Central de conversões PDF e métricas do sistema</p>
             </div>
             <div className="flex items-center gap-4">
-            <SupportTicket />
-            <TicketManagement />
-              <div className="flex items-center gap-2">
-                <Shield className="w-4 h-4 text-secondary" />
-                <span className="text-sm text-muted-foreground">Seguro & Rápido</span>
-              </div>
+              <SupportTicket />
+              <TicketManagement />
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
       <main className="container mx-auto px-6 py-8">
         {/* Hero Section */}
