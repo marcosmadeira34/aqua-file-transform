@@ -1,11 +1,13 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import Index from "./pages/Index";
+import Auth from "./pages/Auth";
 import Conversions from "./pages/Conversions";
 import Tickets from "./pages/Tickets";
 import Analytics from "./pages/Analytics";
@@ -28,13 +30,17 @@ const App = () => (
             <div className="flex-1 flex flex-col">
               <header className="h-14 flex items-center justify-between px-6 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                 <SidebarTrigger className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-muted transition-colors" />
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-4">
                   <span className="text-sm text-muted-foreground">Sistema PDF Patrimonium</span>
+                  <Button variant="ghost" size="sm" onClick={() => window.location.href = "/auth"}>
+                    Entrar
+                  </Button>
                 </div>
               </header>
               <main className="flex-1 overflow-auto">
                 <Routes>
                   <Route path="/" element={<Index />} />
+                  <Route path="/auth" element={<Auth />} />
                   <Route path="/conversions" element={<Conversions />} />
                   <Route path="/tickets" element={<Tickets />} />
                   <Route path="/analytics" element={<Analytics />} />

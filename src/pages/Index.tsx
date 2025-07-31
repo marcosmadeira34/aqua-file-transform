@@ -83,10 +83,10 @@ const Index = () => {
                 variant="outline" 
                 size="lg" 
                 className="text-lg px-8 py-6"
-                onClick={() => setIsVideoPlaying(true)}
+                onClick={() => window.location.href = "/auth"}
               >
-                <Play className="w-5 h-5 mr-2" />
-                Ver Demonstração
+                <MessageSquare className="w-5 h-5 mr-2" />
+                Já tenho conta
               </Button>
             </div>
             <div className="flex items-center justify-center gap-8 mt-12 text-sm text-muted-foreground">
