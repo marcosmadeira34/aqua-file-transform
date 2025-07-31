@@ -4,19 +4,35 @@ import FileUpload from "@/components/FileUpload";
 import ConversionInterface from "@/components/ConversionInterface";
 import SupportTicket from "@/components/SupportTicket";
 import TicketManagement from "@/components/TicketManagement";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { 
   FileText, 
   CheckCircle, 
   TrendingUp, 
   Clock,
   Zap,
-  Shield
+  Shield,
+  Star,
+  Users,
+  Download,
+  Play,
+  ArrowRight,
+  Award,
+  Globe,
+  Lock,
+  Sparkles,
+  ChevronRight,
+  Mail,
+  MessageSquare
 } from "lucide-react";
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [conversionComplete, setConversionComplete] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   
   const [metrics, setMetrics] = useState({
     pdfsLoaded: 1247,
@@ -41,47 +57,341 @@ const Index = () => {
 
   return (
     <div className="min-h-full bg-background">
-      {/* Header */}
-      <div className="border-b border-border/50 bg-card/30 mb-6">
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                Dashboard
-              </h1>
-              <p className="text-muted-foreground mt-1">Central de conversões PDF e métricas do sistema</p>
+      {/* Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/10">
+        <div className="absolute inset-0 bg-grid-white/10 bg-grid-16 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))]" />
+        <div className="relative container mx-auto px-6 py-20 lg:py-32">
+          <div className="text-center max-w-4xl mx-auto">
+            <Badge variant="secondary" className="mb-6 px-4 py-2 text-sm font-medium">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Tecnologia de Ponta em Conversão de Documentos
+            </Badge>
+            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent leading-tight">
+              Transforme PDFs em
+              <span className="block text-gradient">Qualquer Formato</span>
+            </h1>
+            <p className="text-xl text-muted-foreground mt-6 max-w-2xl mx-auto leading-relaxed">
+              A plataforma mais avançada do Brasil para conversão de documentos. 
+              Rápida, segura e com qualidade profissional garantida.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+              <Button size="lg" className="text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all duration-300">
+                Começar Grátis
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="text-lg px-8 py-6"
+                onClick={() => setIsVideoPlaying(true)}
+              >
+                <Play className="w-5 h-5 mr-2" />
+                Ver Demonstração
+              </Button>
             </div>
-            <div className="flex items-center gap-4">
-              <SupportTicket />
-              <TicketManagement />
+            <div className="flex items-center justify-center gap-8 mt-12 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-primary" />
+                Gratuito para começar
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-primary" />
+                Sem cartão de crédito
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-primary" />
+                Setup em 2 minutos
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <main className="container mx-auto px-6 py-8">
-        {/* Hero Section */}
-        <section className="text-center mb-12 animate-fade-in">
-          <div className="max-w-3xl mx-auto space-y-6">
-            <h2 className="text-4xl md:text-5xl font-bold gradient-hero bg-clip-text text-transparent">
-              Converta seus PDFs com
-              <span className="block">Inteligência e Velocidade</span>
+      {/* Social Proof */}
+      <section className="py-12 bg-muted/30">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-8">
+            <p className="text-muted-foreground">Confiado por milhares de profissionais</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center opacity-60">
+            <div className="text-center">
+              <div className="font-bold text-2xl">50k+</div>
+              <div className="text-sm text-muted-foreground">Usuários ativos</div>
+            </div>
+            <div className="text-center">
+              <div className="font-bold text-2xl">2M+</div>
+              <div className="text-sm text-muted-foreground">PDFs convertidos</div>
+            </div>
+            <div className="text-center">
+              <div className="font-bold text-2xl">99.9%</div>
+              <div className="text-sm text-muted-foreground">Uptime</div>
+            </div>
+            <div className="text-center">
+              <div className="font-bold text-2xl">4.9★</div>
+              <div className="text-sm text-muted-foreground">Avaliação média</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <main className="container mx-auto px-6">
+        {/* Features Section */}
+        <section className="py-20">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Recursos que Fazem a Diferença
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Nossa plataforma avançada transforma documentos PDF em múltiplos formatos 
-              com precisão excepcional e eficiência incomparável.
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Descubra por que nossa plataforma é a escolha número 1 para conversão de documentos
             </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="relative group hover:shadow-lg transition-all duration-300 border-border/50">
+              <CardHeader>
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <Zap className="w-6 h-6 text-primary" />
+                </div>
+                <CardTitle>Conversão Instantânea</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Converta seus documentos em segundos com nossa tecnologia de processamento em nuvem de última geração.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="relative group hover:shadow-lg transition-all duration-300 border-border/50">
+              <CardHeader>
+                <div className="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center mb-4">
+                  <Shield className="w-6 h-6 text-secondary" />
+                </div>
+                <CardTitle>Segurança Total</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Criptografia de ponta a ponta e exclusão automática garantem que seus documentos estejam sempre protegidos.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="relative group hover:shadow-lg transition-all duration-300 border-border/50">
+              <CardHeader>
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <Globe className="w-6 h-6 text-primary" />
+                </div>
+                <CardTitle>Múltiplos Formatos</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Suporte a mais de 15 formatos diferentes, incluindo Word, Excel, PowerPoint, imagens e muito mais.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Interactive Demo Section */}
+        <section className="py-20 bg-muted/30 -mx-6 px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Experimente Agora Mesmo
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Faça upload de um PDF e veja a magia acontecer em tempo real
+            </p>
+          </div>
+
+          {/* Step 1: Upload */}
+          {currentStep === 1 && (
+            <div className="max-w-2xl mx-auto animate-fade-in">
+              <Card className="shadow-xl border-border/50">
+                <CardContent className="p-8 text-center">
+                  <div className="w-16 h-16 mx-auto mb-6 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center">
+                    <FileText className="w-8 h-8 text-primary-foreground" />
+                  </div>
+                  <h3 className="text-2xl font-semibold mb-4">
+                    Faça o upload do seu PDF
+                  </h3>
+                  <p className="text-muted-foreground mb-8">
+                    Selecione ou arraste seu arquivo PDF para começar a conversão
+                  </p>
+                  <FileUpload 
+                    onFileUpload={(file) => {
+                      setUploadedFile(file);
+                      setCurrentStep(2);
+                    }}
+                  />
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Step 2: Conversion */}
+          {currentStep === 2 && (
+            <div className="max-w-2xl mx-auto animate-fade-in">
+              <Card className="shadow-xl border-border/50">
+                <CardContent className="p-8">
+                  <div className="text-center mb-8">
+                    <div className="w-16 h-16 mx-auto mb-6 rounded-lg bg-gradient-to-br from-secondary to-secondary/70 flex items-center justify-center">
+                      <Zap className="w-8 h-8 text-secondary-foreground" />
+                    </div>
+                    <h3 className="text-2xl font-semibold mb-4">
+                      Configure a conversão
+                    </h3>
+                    <p className="text-muted-foreground">
+                      Escolha o formato desejado para: <span className="font-medium text-foreground">{uploadedFile?.name}</span>
+                    </p>
+                  </div>
+                  <ConversionInterface 
+                    onConversionComplete={() => {
+                      setConversionComplete(true);
+                      setCurrentStep(3);
+                    }}
+                  />
+                  <div className="mt-6 text-center">
+                    <Button 
+                      variant="ghost" 
+                      onClick={() => setCurrentStep(1)}
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      ← Voltar para upload
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Step 3: Download */}
+          {currentStep === 3 && conversionComplete && (
+            <div className="max-w-2xl mx-auto animate-fade-in">
+              <Card className="shadow-xl border-border/50">
+                <CardContent className="p-8 text-center">
+                  <div className="w-16 h-16 mx-auto mb-6 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center">
+                    <CheckCircle className="w-8 h-8 text-primary-foreground" />
+                  </div>
+                  <h3 className="text-2xl font-semibold mb-4">
+                    Conversão concluída!
+                  </h3>
+                  <p className="text-muted-foreground mb-8">
+                    Seu arquivo foi convertido com sucesso. Faça o download abaixo.
+                  </p>
+                  <div className="space-y-4">
+                    <Button size="lg" className="w-full">
+                      <Download className="w-5 h-5 mr-2" />
+                      Download do arquivo convertido
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="w-full"
+                      onClick={() => {
+                        setCurrentStep(1);
+                        setUploadedFile(null);
+                        setConversionComplete(false);
+                      }}
+                    >
+                      Converter novo arquivo
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </section>
+
+        {/* Testimonials */}
+        <section className="py-20">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              O que nossos clientes dizem
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Mais de 50.000 profissionais confiam em nossa plataforma
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="relative border-border/50">
+              <CardContent className="p-6">
+                <div className="flex items-center mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+                  ))}
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  "Incrível! Economizo horas todos os dias. A qualidade da conversão é perfeita e o processo é super intuitivo."
+                </p>
+                <div className="flex items-center">
+                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-3">
+                    <Users className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <div className="font-semibold">Maria Silva</div>
+                    <div className="text-sm text-muted-foreground">Advogada</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="relative border-border/50">
+              <CardContent className="p-6">
+                <div className="flex items-center mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+                  ))}
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  "Nossa empresa aumentou a produtividade em 40%. A plataforma é essencial para nosso fluxo de trabalho."
+                </p>
+                <div className="flex items-center">
+                  <div className="w-10 h-10 bg-secondary/10 rounded-full flex items-center justify-center mr-3">
+                    <Award className="w-5 h-5 text-secondary" />
+                  </div>
+                  <div>
+                    <div className="font-semibold">Carlos Santos</div>
+                    <div className="text-sm text-muted-foreground">Diretor de TI</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="relative border-border/50">
+              <CardContent className="p-6">
+                <div className="flex items-center mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+                  ))}
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  "Segurança e velocidade em um só lugar. Não consigo mais trabalhar sem essa ferramenta incrível."
+                </p>
+                <div className="flex items-center">
+                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-3">
+                    <Lock className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <div className="font-semibold">Ana Costa</div>
+                    <div className="text-sm text-muted-foreground">Contadora</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
         {/* Metrics Dashboard */}
-        <section className="mb-12">
-          <h3 className="text-2xl font-semibold text-foreground mb-6 animate-fade-in">
-            Métricas em Tempo Real
-          </h3>
+        <section className="py-20 bg-muted/30 -mx-6 px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Métricas em Tempo Real
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Acompanhe o poder da nossa plataforma em números
+            </p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <MetricsCard
-              title="PDFs Carregados"
+              title="PDFs Processados"
               value={metrics.pdfsLoaded.toLocaleString()}
               subtitle="Total de arquivos"
               trend="up"
@@ -90,9 +400,9 @@ const Index = () => {
               delay={0}
             />
             <MetricsCard
-              title="Processados"
+              title="Conversões Concluídas"
               value={metrics.processed.toLocaleString()}
-              subtitle="Conversões concluídas"
+              subtitle="Com sucesso"
               trend="up"
               trendValue="+8% esta semana"
               icon={<CheckCircle className="w-6 h-6" />}
@@ -101,7 +411,7 @@ const Index = () => {
             <MetricsCard
               title="Taxa de Sucesso"
               value={`${metrics.successRate.toFixed(1)}%`}
-              subtitle="Conversões bem-sucedidas"
+              subtitle="Precisão garantida"
               trend="up"
               trendValue="+2.1% esta semana"
               icon={<TrendingUp className="w-6 h-6" />}
@@ -110,7 +420,7 @@ const Index = () => {
             <MetricsCard
               title="Tempo Economizado"
               value={`${metrics.timeSaved.toFixed(1)}h`}
-              subtitle="Horas poupadas hoje"
+              subtitle="Hoje pelos usuários"
               trend="up"
               trendValue="+15% esta semana"
               icon={<Clock className="w-6 h-6" />}
@@ -119,145 +429,123 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Step 1: Upload */}
-        {currentStep === 1 && (
-          <section className="max-w-2xl mx-auto animate-fade-in">
-            <div className="bg-card rounded-xl border border-border/50 shadow-lg">
-              <div className="p-8 text-center">
-                <div className="w-16 h-16 mx-auto mb-6 rounded-lg gradient-primary flex items-center justify-center">
-                  <FileText className="w-8 h-8 text-primary-foreground" />
-                </div>
-                <h3 className="text-2xl font-semibold text-foreground mb-4">
-                  Faça o upload do seu PDF
-                </h3>
-                <p className="text-muted-foreground mb-8">
-                  Selecione ou arraste seu arquivo PDF para começar a conversão
-                </p>
-                <FileUpload 
-                  onFileUpload={(file) => {
-                    setUploadedFile(file);
-                    setCurrentStep(2);
-                  }}
-                />
+        {/* CTA Section */}
+        <section className="py-20">
+          <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-secondary/10 border-border/50">
+            <CardContent className="p-12 text-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Pronto para transformar seu fluxo de trabalho?
+              </h2>
+              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+                Junte-se a milhares de profissionais que já economizam horas todos os dias
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="text-lg px-8 py-6">
+                  Começar Gratuitamente
+                  <ChevronRight className="w-5 h-5 ml-2" />
+                </Button>
+                <Button variant="outline" size="lg" className="text-lg px-8 py-6">
+                  <MessageSquare className="w-5 h-5 mr-2" />
+                  Falar com Especialista
+                </Button>
               </div>
-            </div>
-          </section>
-        )}
-
-        {/* Step 2: Conversion */}
-        {currentStep === 2 && (
-          <section className="max-w-2xl mx-auto animate-fade-in">
-            <div className="bg-card rounded-xl border border-border/50 shadow-lg">
-              <div className="p-8">
-                <div className="text-center mb-8">
-                  <div className="w-16 h-16 mx-auto mb-6 rounded-lg gradient-secondary flex items-center justify-center">
-                    <Zap className="w-8 h-8 text-secondary-foreground" />
-                  </div>
-                  <h3 className="text-2xl font-semibold text-foreground mb-4">
-                    Configure a conversão
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Escolha o formato desejado e inicie a conversão do arquivo: <span className="font-medium text-foreground">{uploadedFile?.name}</span>
-                  </p>
+              <div className="flex items-center justify-center gap-6 mt-8 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-primary" />
+                  14 dias grátis
                 </div>
-                <ConversionInterface 
-                  onConversionComplete={() => {
-                    setConversionComplete(true);
-                    setCurrentStep(3);
-                  }}
-                />
-                <div className="mt-6 text-center">
-                  <button
-                    onClick={() => setCurrentStep(1)}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    ← Voltar para upload
-                  </button>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-primary" />
+                  Sem compromisso
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-primary" />
+                  Suporte 24/7
                 </div>
               </div>
-            </div>
-          </section>
-        )}
-
-        {/* Step 3: Download */}
-        {currentStep === 3 && conversionComplete && (
-          <section className="max-w-2xl mx-auto animate-fade-in">
-            <div className="bg-card rounded-xl border border-border/50 shadow-lg">
-              <div className="p-8 text-center">
-                <div className="w-16 h-16 mx-auto mb-6 rounded-lg gradient-primary flex items-center justify-center">
-                  <CheckCircle className="w-8 h-8 text-primary-foreground" />
-                </div>
-                <h3 className="text-2xl font-semibold text-foreground mb-4">
-                  Conversão concluída!
-                </h3>
-                <p className="text-muted-foreground mb-8">
-                  Seu arquivo foi convertido com sucesso. Faça o download abaixo.
-                </p>
-                <div className="space-y-4">
-                  <button className="w-full bg-primary text-primary-foreground py-3 px-6 rounded-lg font-medium hover:bg-primary/90 transition-colors">
-                    Download do arquivo convertido
-                  </button>
-                  <button
-                    onClick={() => {
-                      setCurrentStep(1);
-                      setUploadedFile(null);
-                      setConversionComplete(false);
-                    }}
-                    className="w-full bg-secondary text-secondary-foreground py-3 px-6 rounded-lg font-medium hover:bg-secondary/90 transition-colors"
-                  >
-                    Converter novo arquivo
-                  </button>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Additional Features */}
-        <section className="mt-16 text-center animate-fade-in" style={{ animationDelay: "400ms" }}>
-          <div className="max-w-4xl mx-auto">
-            <h3 className="text-2xl font-semibold text-foreground mb-8">
-              Por que escolher nossa plataforma?
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="space-y-4">
-                <div className="w-12 h-12 mx-auto rounded-lg gradient-primary flex items-center justify-center">
-                  <Zap className="w-6 h-6 text-primary-foreground" />
-                </div>
-                <h4 className="font-semibold text-foreground">Ultra Rápido</h4>
-                <p className="text-muted-foreground text-sm">
-                  Conversões em segundos com nossa tecnologia avançada
-                </p>
-              </div>
-              <div className="space-y-4">
-                <div className="w-12 h-12 mx-auto rounded-lg gradient-secondary flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-secondary-foreground" />
-                </div>
-                <h4 className="font-semibold text-foreground">100% Seguro</h4>
-                <p className="text-muted-foreground text-sm">
-                  Seus documentos são protegidos com criptografia de ponta
-                </p>
-              </div>
-              <div className="space-y-4">
-                <div className="w-12 h-12 mx-auto rounded-lg gradient-primary flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-primary-foreground" />
-                </div>
-                <h4 className="font-semibold text-foreground">Alta Precisão</h4>
-                <p className="text-muted-foreground text-sm">
-                  Qualidade garantida em todas as conversões
-                </p>
-              </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </section>
+
       </main>
 
+      {/* Newsletter Section */}
+      <section className="py-16 bg-muted/50">
+        <div className="container mx-auto px-6 text-center">
+          <h3 className="text-2xl font-bold mb-4">
+            Fique por dentro das novidades
+          </h3>
+          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Receba dicas exclusivas, atualizações de recursos e ofertas especiais diretamente no seu email
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <div className="flex-1">
+              <input
+                type="email"
+                placeholder="Seu melhor email"
+                className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+            <Button size="lg">
+              <Mail className="w-5 h-5 mr-2" />
+              Inscrever
+            </Button>
+          </div>
+          <p className="text-xs text-muted-foreground mt-4">
+            Sem spam. Cancele quando quiser.
+          </p>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="mt-20 border-t border-border/50 bg-card/30">
-        <div className="container mx-auto px-6 py-8">
-          <div className="text-center">
-            <p className="text-muted-foreground">
-              © 2024 PDF Converter Pro. Transformando documentos com inteligência.
+      <footer className="bg-background border-t border-border/50">
+        <div className="container mx-auto px-6 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="space-y-4">
+              <h4 className="font-semibold text-lg">PDF Patrimonium</h4>
+              <p className="text-muted-foreground text-sm">
+                A plataforma mais avançada para conversão de documentos do Brasil.
+              </p>
+              <div className="flex items-center gap-4">
+                <SupportTicket />
+                <TicketManagement />
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <h5 className="font-semibold">Produto</h5>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><a href="#" className="hover:text-foreground transition-colors">Recursos</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Preços</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">API</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Integrações</a></li>
+              </ul>
+            </div>
+            
+            <div className="space-y-4">
+              <h5 className="font-semibold">Empresa</h5>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><a href="#" className="hover:text-foreground transition-colors">Sobre nós</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Blog</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Carreiras</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Contato</a></li>
+              </ul>
+            </div>
+            
+            <div className="space-y-4">
+              <h5 className="font-semibold">Suporte</h5>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><a href="#" className="hover:text-foreground transition-colors">Central de Ajuda</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Documentação</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Status</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Política de Privacidade</a></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-border/50 mt-12 pt-8 text-center">
+            <p className="text-muted-foreground text-sm">
+              © 2024 PDF Patrimonium. Todos os direitos reservados. Transformando documentos com inteligência.
             </p>
           </div>
         </div>
