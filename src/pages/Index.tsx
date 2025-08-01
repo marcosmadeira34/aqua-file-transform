@@ -4,6 +4,7 @@ import FileUpload from "@/components/FileUpload";
 import ConversionInterface from "@/components/ConversionInterface";
 import SupportTicket from "@/components/SupportTicket";
 import TicketManagement from "@/components/TicketManagement";
+import ROICalculator from "@/components/ROICalculator";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -377,6 +378,11 @@ const Index = () => {
               </CardContent>
             </Card>
           </div>
+        </section>
+
+        {/* ROI Calculator Section */}
+        <section className="py-20 bg-muted/30 -mx-6 px-6">
+          <ROICalculator />
         </section>
 
         {/* Metrics Dashboard */}
