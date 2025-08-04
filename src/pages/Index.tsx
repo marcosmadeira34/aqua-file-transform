@@ -217,9 +217,8 @@ const Index = () => {
                     Selecione ou arraste seu arquivo PDF para começar a conversão
                   </p>
                   <FileUpload 
-                    onFileUpload={(file) => {
-                      setUploadedFile(file);
-                      setCurrentStep(2);
+                    onQueueComplete={(queue) => {
+                      console.log('Fila de conversão criada:', queue.name);
                     }}
                   />
                 </CardContent>
