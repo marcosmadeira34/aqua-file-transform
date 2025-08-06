@@ -60,9 +60,16 @@ const Index = () => {
     <div className="min-h-full bg-background">
       {/* Logo Section */}
       <div className="absolute top-6 left-6 z-50">
-        <div className="w-32 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
-          <span className="text-primary-foreground font-bold text-lg">LOGO</span>
-        </div>
+        <a href="/" title="PDF Converter" aria-label="Back to home" className="block">
+          <img 
+            src="/placeholder.svg" 
+            alt="PDF Converter Logo" 
+            loading="eager" 
+            width="120" 
+            height="40"
+            className="h-10 w-auto"
+          />
+        </a>
       </div>
 
       {/* Hero Section */}
