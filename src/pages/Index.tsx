@@ -58,6 +58,13 @@ const Index = () => {
 
   return (
     <div className="min-h-full bg-background">
+      {/* Logo Section */}
+      <div className="absolute top-6 left-6 z-50">
+        <div className="w-32 h-12 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+          <span className="text-primary-foreground font-bold text-lg">LOGO</span>
+        </div>
+      </div>
+
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/10">
         <div className="absolute inset-0 bg-grid-white/10 bg-grid-16 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))]" />
