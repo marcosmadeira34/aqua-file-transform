@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 
 interface XmlData {
@@ -125,6 +126,9 @@ const XmlValidation = () => {
       <AlertTriangle className="w-4 h-4 text-warning" />;
   };
 
+  const [editingAnomaly, setEditingAnomaly] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState<string>('');
+
   const handleCorrectAnomaly = (fileId: string, anomalyId: string, correctedValue: any) => {
     setXmlFiles(files => 
       files.map(file => {
@@ -143,6 +147,13 @@ const XmlValidation = () => {
         return file;
       })
     );
+    setEditingAnomaly(null);
+    setEditValue('');
+  };
+
+  const handleStartEdit = (anomalyId: string, currentValue: any) => {
+    setEditingAnomaly(anomalyId);
+    setEditValue(String(currentValue));
   };
 
   const handleValidateFile = (fileId: string) => {
@@ -163,12 +174,26 @@ const XmlValidation = () => {
     setSending(true);
     const validatedFiles = xmlFiles.filter(f => f.validationStatus === 'validado' || f.validationStatus === 'corrigido');
     
-    // Simular envio para API
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Simular envio em lotes de 5 arquivos por vez
+    const batchSize = 5;
+    const batches = [];
+    for (let i = 0; i < validatedFiles.length; i += batchSize) {
+      batches.push(validatedFiles.slice(i, i + batchSize));
+    }
+    
+    for (let i = 0; i < batches.length; i++) {
+      toast({
+        title: `Enviando lote ${i + 1}/${batches.length}`,
+        description: `Processando ${batches[i].length} arquivo(s)...`
+      });
+      
+      // Simular envio do lote
+      await new Promise(resolve => setTimeout(resolve, 1500));
+    }
     
     toast({
       title: "Enviado com sucesso",
-      description: `${validatedFiles.length} arquivo(s) enviado(s) para a API.`
+      description: `${validatedFiles.length} arquivo(s) enviado(s) em ${batches.length} lote(s).`
     });
     setSending(false);
   };
@@ -349,16 +374,52 @@ const XmlValidation = () => {
                                   Sugestão: {anomaly.suggestion}
                                 </p>
                               )}
-                              <div className="flex gap-2 mt-2">
-                                <Button 
-                                  size="sm" 
-                                  variant="outline"
-                                  onClick={() => handleCorrectAnomaly(selectedFile.id, anomaly.id, anomaly.suggestion || 'corrigido')}
-                                >
-                                  Corrigir
-                                </Button>
-                                <Button size="sm" variant="ghost">Ignorar</Button>
-                              </div>
+                              {editingAnomaly === anomaly.id ? (
+                                <div className="flex gap-2 mt-2">
+                                  <Input
+                                    value={editValue}
+                                    onChange={(e) => setEditValue(e.target.value)}
+                                    placeholder="Digite o valor corrigido"
+                                    className="flex-1"
+                                  />
+                                  <Button 
+                                    size="sm"
+                                    onClick={() => handleCorrectAnomaly(selectedFile.id, anomaly.id, editValue)}
+                                  >
+                                    Salvar
+                                  </Button>
+                                  <Button 
+                                    size="sm" 
+                                    variant="ghost"
+                                    onClick={() => {
+                                      setEditingAnomaly(null);
+                                      setEditValue('');
+                                    }}
+                                  >
+                                    Cancelar
+                                  </Button>
+                                </div>
+                              ) : (
+                                <div className="flex gap-2 mt-2">
+                                  <Button 
+                                    size="sm" 
+                                    variant="outline"
+                                    onClick={() => handleStartEdit(anomaly.id, anomaly.value)}
+                                  >
+                                    Corrigir Manualmente
+                                  </Button>
+                                  {anomaly.suggestion && (
+                                    <Button 
+                                      size="sm" 
+                                      variant="outline"
+                                      onClick={() => handleCorrectAnomaly(selectedFile.id, anomaly.id, anomaly.suggestion)}
+                                    >
+                                      Usar Sugestão
+                                    </Button>
+                                  )}
+                                  <Button size="sm" variant="ghost">Ignorar</Button>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </Alert>

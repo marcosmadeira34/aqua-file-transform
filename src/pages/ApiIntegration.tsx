@@ -4,102 +4,97 @@ import {
   CheckCircle, 
   AlertCircle, 
   Clock, 
-  Settings,
-  Key,
-  Globe,
-  RefreshCw,
   Eye,
-  Download
+  Download,
+  RefreshCw,
+  FileText,
+  TrendingUp,
+  Activity
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
-interface ApiEndpoint {
+interface SentFile {
   id: string;
-  name: string;
-  url: string;
-  method: 'POST' | 'PUT' | 'PATCH';
-  headers: Record<string, string>;
-  isActive: boolean;
-}
-
-interface ApiResponse {
-  id: string;
-  endpointId: string;
   fileName: string;
+  queueName: string;
   status: 'enviando' | 'sucesso' | 'erro' | 'timeout';
-  requestBody: any;
-  responseBody: any;
-  statusCode?: number;
-  duration?: number;
-  timestamp: string;
+  batchId: string;
+  sentAt: string;
+  responseTime?: number;
   errorMessage?: string;
 }
 
-const mockEndpoints: ApiEndpoint[] = [
+interface SendBatch {
+  id: string;
+  filesCount: number;
+  status: 'enviando' | 'concluido' | 'erro_parcial';
+  startedAt: string;
+  completedAt?: string;
+  successCount: number;
+  errorCount: number;
+}
+
+const mockSentFiles: SentFile[] = [
   {
     id: '1',
-    name: 'API Contabilidade',
-    url: 'https://api.contabilidade.com/v1/notas-fiscais',
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer xxx-api-key-xxx',
-      'Content-Type': 'application/json'
-    },
-    isActive: true
+    fileName: 'nota_fiscal_001.xml',
+    queueName: 'Fila Empresa X',
+    status: 'sucesso',
+    batchId: 'batch_001',
+    sentAt: '2024-01-15T10:30:00Z',
+    responseTime: 1250
   },
   {
     id: '2',
-    name: 'API Backup',
-    url: 'https://backup.sistema.com/v2/documents',
-    method: 'POST',
-    headers: {
-      'X-API-Key': 'backup-api-key',
-      'Content-Type': 'application/json'
-    },
-    isActive: false
+    fileName: 'nota_fiscal_002.xml',
+    queueName: 'Fila Empresa X',
+    status: 'sucesso',
+    batchId: 'batch_001',
+    sentAt: '2024-01-15T10:30:05Z',
+    responseTime: 980
+  },
+  {
+    id: '3',
+    fileName: 'nota_fiscal_003.xml',
+    queueName: 'Fila Empresa Y',
+    status: 'erro',
+    batchId: 'batch_002',
+    sentAt: '2024-01-15T11:15:00Z',
+    responseTime: 2500,
+    errorMessage: 'Dados de CNPJ inválidos'
   }
 ];
 
-const mockResponses: ApiResponse[] = [
+const mockBatches: SendBatch[] = [
   {
-    id: '1',
-    endpointId: '1',
-    fileName: 'nota_fiscal_001.xml',
-    status: 'sucesso',
-    requestBody: { notaFiscal: { numero: '000001' } },
-    responseBody: { id: 'nf_123', status: 'processada' },
-    statusCode: 200,
-    duration: 1250,
-    timestamp: '2024-01-15T10:30:00Z'
+    id: 'batch_001',
+    filesCount: 5,
+    status: 'concluido',
+    startedAt: '2024-01-15T10:30:00Z',
+    completedAt: '2024-01-15T10:31:30Z',
+    successCount: 5,
+    errorCount: 0
   },
   {
-    id: '2',
-    endpointId: '1',
-    fileName: 'nota_fiscal_002.xml',
-    status: 'erro',
-    requestBody: { notaFiscal: { numero: '000002' } },
-    responseBody: { error: 'Dados inválidos' },
-    statusCode: 400,
-    duration: 800,
-    timestamp: '2024-01-15T10:32:00Z',
-    errorMessage: 'Erro de validação no campo CNPJ'
+    id: 'batch_002',
+    filesCount: 3,
+    status: 'erro_parcial',
+    startedAt: '2024-01-15T11:15:00Z',
+    completedAt: '2024-01-15T11:17:00Z',
+    successCount: 2,
+    errorCount: 1
   }
 ];
 
 const ApiIntegration = () => {
-  const [endpoints, setEndpoints] = useState<ApiEndpoint[]>(mockEndpoints);
-  const [responses, setResponses] = useState<ApiResponse[]>(mockResponses);
-  const [selectedEndpoint, setSelectedEndpoint] = useState<ApiEndpoint | null>(endpoints[0]);
-  const [testPayload, setTestPayload] = useState('{\n  "notaFiscal": {\n    "numero": "000001",\n    "serie": "1"\n  }\n}');
-  const [isTesting, setIsTesting] = useState(false);
+  const [sentFiles, setSentFiles] = useState<SentFile[]>(mockSentFiles);
+  const [batches, setBatches] = useState<SendBatch[]>(mockBatches);
+  const [selectedTab, setSelectedTab] = useState("overview");
   const { toast } = useToast();
 
   const getStatusIcon = (status: string) => {
@@ -107,7 +102,7 @@ const ApiIntegration = () => {
       case 'sucesso':
         return <CheckCircle className="w-4 h-4 text-success" />;
       case 'enviando':
-        return <Clock className="w-4 h-4 text-warning" />;
+        return <Clock className="w-4 h-4 text-warning animate-spin" />;
       case 'erro':
       case 'timeout':
         return <AlertCircle className="w-4 h-4 text-destructive" />;
@@ -119,73 +114,64 @@ const ApiIntegration = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'sucesso':
+      case 'concluido':
         return <Badge variant="secondary" className="bg-success/10 text-success border-success/20">Sucesso</Badge>;
       case 'enviando':
         return <Badge variant="secondary" className="bg-warning/10 text-warning border-warning/20">Enviando</Badge>;
       case 'erro':
-        return <Badge variant="destructive">Erro</Badge>;
       case 'timeout':
-        return <Badge variant="destructive">Timeout</Badge>;
+        return <Badge variant="destructive">Erro</Badge>;
+      case 'erro_parcial':
+        return <Badge variant="secondary" className="bg-orange-500/10 text-orange-500 border-orange-500/20">Parcial</Badge>;
       default:
         return null;
     }
-  };
-
-  const handleTestEndpoint = async () => {
-    if (!selectedEndpoint) return;
-    
-    setIsTesting(true);
-    
-    // Simular teste de API
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    const newResponse: ApiResponse = {
-      id: Date.now().toString(),
-      endpointId: selectedEndpoint.id,
-      fileName: 'teste_manual.json',
-      status: Math.random() > 0.3 ? 'sucesso' : 'erro',
-      requestBody: JSON.parse(testPayload),
-      responseBody: Math.random() > 0.3 ? 
-        { id: 'test_' + Date.now(), status: 'processado' } : 
-        { error: 'Erro simulado de teste' },
-      statusCode: Math.random() > 0.3 ? 200 : 400,
-      duration: Math.floor(Math.random() * 3000) + 500,
-      timestamp: new Date().toISOString(),
-      errorMessage: Math.random() > 0.3 ? undefined : 'Erro simulado durante o teste'
-    };
-    
-    setResponses(prev => [newResponse, ...prev]);
-    setIsTesting(false);
-    
-    toast({
-      title: newResponse.status === 'sucesso' ? "Teste realizado com sucesso" : "Teste falhou",
-      description: `Endpoint testado em ${newResponse.duration}ms`
-    });
-  };
-
-  const handleSaveEndpoint = () => {
-    if (!selectedEndpoint) return;
-    
-    setEndpoints(prev => 
-      prev.map(ep => 
-        ep.id === selectedEndpoint.id ? selectedEndpoint : ep
-      )
-    );
-    
-    toast({
-      title: "Endpoint salvo",
-      description: "Configurações do endpoint foram atualizadas."
-    });
   };
 
   const formatDuration = (ms: number) => {
     return ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(1)}s`;
   };
 
-  const successCount = responses.filter(r => r.status === 'sucesso').length;
-  const errorCount = responses.filter(r => r.status === 'erro' || r.status === 'timeout').length;
-  const avgDuration = responses.length > 0 ? 
-    Math.round(responses.reduce((acc, r) => acc + (r.duration || 0), 0) / responses.length) : 0;
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleString('pt-BR');
+  };
+
+  const totalFiles = sentFiles.length;
+  const successFiles = sentFiles.filter(f => f.status === 'sucesso').length;
+  const errorFiles = sentFiles.filter(f => f.status === 'erro' || f.status === 'timeout').length;
+  const avgResponseTime = sentFiles.length > 0 ? 
+    Math.round(sentFiles.reduce((acc, f) => acc + (f.responseTime || 0), 0) / sentFiles.length) : 0;
+
+  const handleResendFile = (fileId: string) => {
+    setSentFiles(files => 
+      files.map(file => 
+        file.id === fileId 
+          ? { ...file, status: 'enviando' }
+          : file
+      )
+    );
+
+    // Simular reenvio
+    setTimeout(() => {
+      setSentFiles(files => 
+        files.map(file => 
+          file.id === fileId 
+            ? { 
+                ...file, 
+                status: Math.random() > 0.3 ? 'sucesso' : 'erro',
+                sentAt: new Date().toISOString(),
+                responseTime: Math.floor(Math.random() * 2000) + 500
+              }
+            : file
+        )
+      );
+    }, 2000);
+
+    toast({
+      title: "Reenviando arquivo",
+      description: "O arquivo será processado novamente."
+    });
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -193,15 +179,15 @@ const ApiIntegration = () => {
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            Integração com APIs
+            Integração com API
           </h1>
           <p className="text-muted-foreground mt-1">
-            Configure e monitore o envio de XMLs para APIs externas
+            Acompanhe o status dos arquivos enviados para a API externa
           </p>
         </div>
         <Button variant="outline">
           <Download className="w-4 h-4 mr-2" />
-          Relatório de Integrações
+          Relatório de Envios
         </Button>
       </div>
 
@@ -211,8 +197,8 @@ const ApiIntegration = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Total de Envios</p>
-                <p className="text-2xl font-bold">{responses.length}</p>
+                <p className="text-sm text-muted-foreground">Total Enviados</p>
+                <p className="text-2xl font-bold">{totalFiles}</p>
               </div>
               <Send className="w-8 h-8 text-primary" />
             </div>
@@ -223,7 +209,7 @@ const ApiIntegration = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Sucessos</p>
-                <p className="text-2xl font-bold text-success">{successCount}</p>
+                <p className="text-2xl font-bold text-success">{successFiles}</p>
               </div>
               <CheckCircle className="w-8 h-8 text-success" />
             </div>
@@ -234,7 +220,7 @@ const ApiIntegration = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Erros</p>
-                <p className="text-2xl font-bold text-destructive">{errorCount}</p>
+                <p className="text-2xl font-bold text-destructive">{errorFiles}</p>
               </div>
               <AlertCircle className="w-8 h-8 text-destructive" />
             </div>
@@ -245,7 +231,7 @@ const ApiIntegration = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Tempo Médio</p>
-                <p className="text-2xl font-bold">{formatDuration(avgDuration)}</p>
+                <p className="text-2xl font-bold">{formatDuration(avgResponseTime)}</p>
               </div>
               <Clock className="w-8 h-8 text-blue-500" />
             </div>
@@ -253,189 +239,177 @@ const ApiIntegration = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Endpoint Configuration */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Settings className="w-5 h-5" />
-              Configuração de Endpoints
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="config" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="config">Configuração</TabsTrigger>
-                <TabsTrigger value="test">Teste</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="config" className="space-y-4">
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="endpoint-select">Endpoint Ativo</Label>
-                    <select 
-                      id="endpoint-select"
-                      className="w-full mt-1 p-2 border rounded-md"
-                      value={selectedEndpoint?.id || ''}
-                      onChange={(e) => {
-                        const endpoint = endpoints.find(ep => ep.id === e.target.value);
-                        setSelectedEndpoint(endpoint || null);
-                      }}
-                    >
-                      {endpoints.map(endpoint => (
-                        <option key={endpoint.id} value={endpoint.id}>
-                          {endpoint.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  
-                  {selectedEndpoint && (
-                    <>
+      {/* Content Tabs */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Histórico de Envios</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+              <TabsTrigger value="files">Arquivos Individuais</TabsTrigger>
+              <TabsTrigger value="batches">Lotes de Envio</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="overview" className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Success Rate */}
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <TrendingUp className="w-8 h-8 text-success" />
                       <div>
-                        <Label htmlFor="endpoint-name">Nome</Label>
-                        <Input
-                          id="endpoint-name"
-                          value={selectedEndpoint.name}
-                          onChange={(e) => setSelectedEndpoint({
-                            ...selectedEndpoint,
-                            name: e.target.value
-                          })}
-                        />
+                        <p className="text-sm text-muted-foreground">Taxa de Sucesso</p>
+                        <p className="text-2xl font-bold">
+                          {totalFiles > 0 ? Math.round((successFiles / totalFiles) * 100) : 0}%
+                        </p>
                       </div>
-                      
-                      <div>
-                        <Label htmlFor="endpoint-url">URL</Label>
-                        <Input
-                          id="endpoint-url"
-                          value={selectedEndpoint.url}
-                          onChange={(e) => setSelectedEndpoint({
-                            ...selectedEndpoint,
-                            url: e.target.value
-                          })}
-                        />
-                      </div>
-                      
-                      <div>
-                        <Label htmlFor="endpoint-headers">Headers (JSON)</Label>
-                        <Textarea
-                          id="endpoint-headers"
-                          value={JSON.stringify(selectedEndpoint.headers, null, 2)}
-                          onChange={(e) => {
-                            try {
-                              const headers = JSON.parse(e.target.value);
-                              setSelectedEndpoint({
-                                ...selectedEndpoint,
-                                headers
-                              });
-                            } catch {}
-                          }}
-                          rows={4}
-                        />
-                      </div>
-                      
-                      <Button onClick={handleSaveEndpoint} className="w-full">
-                        <Settings className="w-4 h-4 mr-2" />
-                        Salvar Configurações
-                      </Button>
-                    </>
-                  )}
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="test" className="space-y-4">
-                <div>
-                  <Label htmlFor="test-payload">Payload de Teste (JSON)</Label>
-                  <Textarea
-                    id="test-payload"
-                    value={testPayload}
-                    onChange={(e) => setTestPayload(e.target.value)}
-                    rows={8}
-                    className="font-mono text-sm"
-                  />
-                </div>
-                
-                <Button 
-                  onClick={handleTestEndpoint}
-                  disabled={!selectedEndpoint || isTesting}
-                  className="w-full"
-                >
-                  {isTesting ? (
-                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                  ) : (
-                    <Send className="w-4 h-4 mr-2" />
-                  )}
-                  Testar Endpoint
-                </Button>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
+                    </div>
+                  </CardContent>
+                </Card>
 
-        {/* Response History */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Globe className="w-5 h-5" />
-              Histórico de Respostas
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3 max-h-96 overflow-y-auto">
-              {responses.length === 0 ? (
-                <div className="text-center py-8">
-                  <Send className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">
-                    Nenhuma requisição realizada ainda
-                  </p>
-                </div>
-              ) : (
-                responses.map((response) => (
-                  <div key={response.id} className="p-3 border rounded-lg space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        {getStatusIcon(response.status)}
-                        <span className="font-medium text-sm">{response.fileName}</span>
+                {/* Last Activity */}
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <Activity className="w-8 h-8 text-primary" />
+                      <div>
+                        <p className="text-sm text-muted-foreground">Último Envio</p>
+                        <p className="text-sm font-medium">
+                          {sentFiles.length > 0 ? 
+                            formatDate(sentFiles[sentFiles.length - 1].sentAt) : 
+                            'Nenhum envio'
+                          }
+                        </p>
                       </div>
-                      {getStatusBadge(response.status)}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Recent Files */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3">Arquivos Recentes</h3>
+                <div className="space-y-2">
+                  {sentFiles.slice(-5).reverse().map((file) => (
+                    <div key={file.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <FileText className="w-4 h-4 text-primary" />
+                        <div>
+                          <p className="font-medium text-sm">{file.fileName}</p>
+                          <p className="text-xs text-muted-foreground">{file.queueName}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {file.responseTime && (
+                          <span className="text-xs text-muted-foreground">
+                            {formatDuration(file.responseTime)}
+                          </span>
+                        )}
+                        {getStatusBadge(file.status)}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="files" className="space-y-4">
+              <div className="space-y-3">
+                {sentFiles.map((file) => (
+                  <div key={file.id} className="p-4 border rounded-lg space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        {getStatusIcon(file.status)}
+                        <div>
+                          <p className="font-medium">{file.fileName}</p>
+                          <p className="text-sm text-muted-foreground">{file.queueName}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {file.responseTime && (
+                          <span className="text-sm text-muted-foreground">
+                            {formatDuration(file.responseTime)}
+                          </span>
+                        )}
+                        {getStatusBadge(file.status)}
+                      </div>
                     </div>
                     
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                      {response.statusCode && (
-                        <span>Status: {response.statusCode}</span>
-                      )}
-                      {response.duration && (
-                        <span>Duração: {formatDuration(response.duration)}</span>
-                      )}
-                      <span>{new Date(response.timestamp).toLocaleString('pt-BR')}</span>
+                      <span>Lote: {file.batchId}</span>
+                      <span>Enviado: {formatDate(file.sentAt)}</span>
                     </div>
                     
-                    {response.errorMessage && (
+                    {file.errorMessage && (
                       <Alert variant="destructive">
                         <AlertCircle className="h-4 w-4" />
-                        <AlertDescription className="text-xs">
-                          {response.errorMessage}
+                        <AlertDescription className="text-sm">
+                          {file.errorMessage}
                         </AlertDescription>
                       </Alert>
                     )}
                     
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline" className="text-xs">
+                      <Button size="sm" variant="outline">
                         <Eye className="w-3 h-3 mr-1" />
-                        Ver Request
+                        Ver Detalhes
                       </Button>
-                      <Button size="sm" variant="outline" className="text-xs">
-                        <Eye className="w-3 h-3 mr-1" />
-                        Ver Response
-                      </Button>
+                      {file.status === 'erro' && (
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleResendFile(file.id)}
+                        >
+                          <RefreshCw className="w-3 h-3 mr-1" />
+                          Reenviar
+                        </Button>
+                      )}
                     </div>
                   </div>
-                ))
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="batches" className="space-y-4">
+              <div className="space-y-3">
+                {batches.map((batch) => (
+                  <div key={batch.id} className="p-4 border rounded-lg space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium">Lote {batch.id}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {batch.filesCount} arquivo(s)
+                        </p>
+                      </div>
+                      {getStatusBadge(batch.status)}
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="text-muted-foreground">Sucessos: </span>
+                        <span className="font-medium text-success">{batch.successCount}</span>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Erros: </span>
+                        <span className="font-medium text-destructive">{batch.errorCount}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                      <span>Iniciado: {formatDate(batch.startedAt)}</span>
+                      {batch.completedAt && (
+                        <span>Concluído: {formatDate(batch.completedAt)}</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
     </div>
   );
 };
