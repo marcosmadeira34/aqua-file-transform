@@ -2,6 +2,8 @@ import { useState } from "react"
 import { 
   Home, 
   FileText, 
+  CheckSquare,
+  Send,
   MessageSquare, 
   Settings, 
   User, 
@@ -41,6 +43,18 @@ const mainNavItems = [
     url: "/conversions", 
     icon: FileText,
     description: "Gerencie suas conversões"
+  },
+  { 
+    title: "Validação XML", 
+    url: "/xml-validation", 
+    icon: CheckSquare,
+    description: "Valide arquivos XML"
+  },
+  { 
+    title: "Integração API", 
+    url: "/api-integration", 
+    icon: Send,
+    description: "Envio para APIs externas"
   },
   { 
     title: "Meus Tickets", 
