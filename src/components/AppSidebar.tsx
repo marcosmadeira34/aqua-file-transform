@@ -4,6 +4,7 @@ import {
   FileText, 
   CheckSquare,
   Send,
+  GitCompare,
   MessageSquare, 
   Settings, 
   User, 
@@ -55,6 +56,12 @@ const mainNavItems = [
     url: "/api-integration", 
     icon: Send,
     description: "Envio para APIs externas"
+  },
+  { 
+    title: "Comparação de Arquivos", 
+    url: "/file-comparison", 
+    icon: GitCompare,
+    description: "Compare dois arquivos"
   },
   { 
     title: "Meus Tickets", 

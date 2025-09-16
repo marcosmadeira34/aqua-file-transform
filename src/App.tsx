@@ -11,6 +11,7 @@ import Auth from "./pages/Auth";
 import Conversions from "./pages/Conversions";
 import XmlValidation from "./pages/XmlValidation";
 import ApiIntegration from "./pages/ApiIntegration";
+import FileComparison from "./pages/FileComparison";
 import Tickets from "./pages/Tickets";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
@@ -46,6 +47,7 @@ const App = () => (
                   <Route path="/conversions" element={<Conversions />} />
                   <Route path="/xml-validation" element={<XmlValidation />} />
                   <Route path="/api-integration" element={<ApiIntegration />} />
+                  <Route path="/file-comparison" element={<FileComparison />} />
                   <Route path="/tickets" element={<Tickets />} />
                   <Route path="/analytics" element={<Analytics />} />
                   <Route path="/settings" element={<Settings />} />
