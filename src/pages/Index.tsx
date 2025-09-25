@@ -8,6 +8,8 @@ import ROICalculator from "@/components/ROICalculator";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import dashboardHero from "@/assets/dashboard-hero.jpg";
+import featuresMockup from "@/assets/features-mockup.jpg";
 import { 
   FileText, 
   CheckCircle, 
@@ -26,7 +28,8 @@ import {
   Sparkles,
   ChevronRight,
   Mail,
-  MessageSquare
+  MessageSquare,
+  X
 } from "lucide-react";
 
 const Index = () => {
@@ -58,92 +61,143 @@ const Index = () => {
 
   return (
     <div className="min-h-full bg-background">
-      {/* Logo Section */}
-      <div className="absolute top-6 left-6 z-50">
-        <a href="/" title="PDF Converter" aria-label="Back to home" className="block">
-          <img 
-            src="/placeholder.svg" 
-            alt="PDF Converter Logo" 
-            loading="eager" 
-            width="120" 
-            height="40"
-            className="h-10 w-auto"
-          />
-        </a>
+      {/* Top Banner */}
+      <div className="bg-gradient-to-r from-primary/90 to-secondary/90 text-primary-foreground">
+        <div className="container mx-auto px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm">
+            <Sparkles className="w-4 h-4" />
+            <span>Economize até 50% em tempo de processamento com nossa tecnologia avançada 🎉</span>
+          </div>
+          <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-white/20">
+            <X className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
 
+      {/* Navigation Bar */}
+      <nav className="bg-background/95 backdrop-blur border-b border-border/50">
+        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <a href="/" title="PDF Patrimonium" aria-label="Back to home" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+                <FileText className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-bold text-lg">PDF Patrimonium</span>
+            </a>
+            <div className="hidden md:flex items-center gap-6 text-sm">
+              <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">Recursos</a>
+              <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">Preços</a>
+              <a href="#docs" className="text-muted-foreground hover:text-foreground transition-colors">Documentação</a>
+              <a href="/help" className="text-muted-foreground hover:text-foreground transition-colors">Ajuda</a>
+            </div>
+          </div>
+          <Button variant="ghost" size="sm" onClick={() => window.location.href = "/auth"}>
+            Entrar
+          </Button>
+        </div>
+      </nav>
+
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/10">
-        <div className="absolute inset-0 bg-grid-white/10 bg-grid-16 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))]" />
-        <div className="relative container mx-auto px-6 py-20 lg:py-32">
-          <div className="text-center max-w-4xl mx-auto">
-            <Badge variant="secondary" className="mb-6 px-4 py-2 text-sm font-medium">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Tecnologia de Ponta em Conversão de Documentos
-            </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent leading-tight">
-              Transforme PDFs em
-              <span className="block text-gradient">Qualquer Formato</span>
+      <section className="relative overflow-hidden bg-gradient-to-b from-background via-background/98 to-muted/30 min-h-[90vh] flex items-center">
+        <div className="absolute inset-0 bg-grid-white/5 bg-grid-16" />
+        <div className="relative container mx-auto px-6 py-20">
+          <div className="text-center max-w-6xl mx-auto">
+            <h1 className="text-6xl md:text-8xl font-bold leading-tight mb-8">
+              <span className="block text-foreground">Sistema PDF para</span>
+              <span className="block bg-gradient-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent">
+                Conversão Avançada
+              </span>
             </h1>
-            <p className="text-xl text-muted-foreground mt-6 max-w-2xl mx-auto leading-relaxed">
-              A plataforma mais avançada do Brasil para conversão de documentos. 
-              Rápida, segura e com qualidade profissional garantida.
+            <p className="text-xl md:text-2xl text-muted-foreground mt-6 max-w-3xl mx-auto leading-relaxed mb-6">
+              Capacitando pequenas equipes a alcançar grandes resultados nos negócios.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
-              <Button size="lg" className="text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all duration-300">
-                Começar Grátis
-                <ArrowRight className="w-5 h-5 ml-2" />
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-12">
+              Uma infraestrutura completa de processamento de documentos para a próxima geração de empresas eficientes.
+            </p>
+            <p className="text-lg font-medium text-foreground/80 mb-10">
+              <strong>Construído para o futuro do trabalho.</strong>
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+              <Button size="lg" className="text-lg px-8 py-6 bg-foreground text-background hover:bg-foreground/90 shadow-lg">
+                Começar Grátis 🍦
               </Button>
               <Button 
                 variant="outline" 
                 size="lg" 
-                className="text-lg px-8 py-6"
+                className="text-lg px-8 py-6 border-border hover:bg-muted/50"
                 onClick={() => window.location.href = "/auth"}
               >
-                <MessageSquare className="w-5 h-5 mr-2" />
-                Já tenho conta
+                Falar Conosco →
               </Button>
             </div>
-            <div className="flex items-center justify-center gap-8 mt-12 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-primary" />
-                Gratuito para começar
+
+            {/* Product Screenshot */}
+            <div className="relative mx-auto max-w-5xl">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-border/50 bg-gradient-to-br from-muted/50 to-background">
+                <img 
+                  src={dashboardHero}
+                  alt="Dashboard do Sistema PDF Patrimonium"
+                  className="w-full h-auto"
+                  loading="eager"
+                />
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-primary" />
-                Sem cartão de crédito
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-primary" />
-                Setup em 2 minutos
-              </div>
+            </div>
+
+            {/* Achievement Badges */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
+              <Badge variant="secondary" className="px-4 py-2 bg-muted/50 border border-border/50">
+                <Award className="w-4 h-4 mr-2" />
+                Melhor Ferramenta 2024
+              </Badge>
+              <Badge variant="secondary" className="px-4 py-2 bg-muted/50 border border-border/50">
+                <Star className="w-4 h-4 mr-2" />
+                4.9★ Avaliação dos Usuários
+              </Badge>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Social Proof */}
-      <section className="py-12 bg-muted/30">
+      {/* Value Proposition */}
+      <section className="py-20 bg-muted/20">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-8">
-            <p className="text-muted-foreground">Confiado por milhares de profissionais</p>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              O futuro do trabalho precisa de novas ferramentas documentais
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+              Pequenas equipes estão conquistando o que costumava exigir mais de 150 pessoas.
+            </p>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Estamos construindo a infraestrutura documental para impulsionar essa revolução.
+            </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center opacity-60">
-            <div className="text-center">
-              <div className="font-bold text-2xl">50k+</div>
-              <div className="text-sm text-muted-foreground">Usuários ativos</div>
-            </div>
-            <div className="text-center">
-              <div className="font-bold text-2xl">2M+</div>
-              <div className="text-sm text-muted-foreground">PDFs convertidos</div>
-            </div>
-            <div className="text-center">
-              <div className="font-bold text-2xl">99.9%</div>
-              <div className="text-sm text-muted-foreground">Uptime</div>
-            </div>
-            <div className="text-center">
-              <div className="font-bold text-2xl">4.9★</div>
-              <div className="text-sm text-muted-foreground">Avaliação média</div>
+
+          {/* Animated Feature Tags */}
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            {[
+              "Validação XML Global", "Comparação de Arquivos", "Proteção contra Fraudes", 
+              "Tutoriais em Vídeo", "API Bem Documentada", "Fácil de Integrar"
+            ].map((feature, index) => (
+              <Badge 
+                key={index} 
+                variant="outline" 
+                className="px-4 py-2 text-sm bg-background/50 border-border hover:bg-muted/50 transition-colors"
+              >
+                {feature}
+              </Badge>
+            ))}
+          </div>
+
+          {/* Code/Features Mockup */}
+          <div className="relative mx-auto max-w-4xl">
+            <div className="relative rounded-2xl overflow-hidden shadow-xl border border-border/50">
+              <img 
+                src={featuresMockup}
+                alt="Interface de recursos avançados"
+                className="w-full h-auto"
+                loading="lazy"
+              />
             </div>
           </div>
         </div>
