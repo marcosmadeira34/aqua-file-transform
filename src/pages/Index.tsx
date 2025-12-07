@@ -1,729 +1,650 @@
-import { useState, useEffect } from "react";
-import MetricsCard from "@/components/MetricsCard";
-import FileUpload from "@/components/FileUpload";
-import ConversionInterface from "@/components/ConversionInterface";
-import SupportTicket from "@/components/SupportTicket";
-import TicketManagement from "@/components/TicketManagement";
-import ROICalculator from "@/components/ROICalculator";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import dashboardHero from "@/assets/dashboard-hero.jpg";
-import featuresMockup from "@/assets/features-mockup.jpg";
-import { 
-  FileText, 
-  CheckCircle, 
-  TrendingUp, 
+import { Link } from "react-router-dom";
+import {
+  FileText,
+  AlertTriangle,
   Clock,
-  Zap,
-  Shield,
-  Star,
-  Users,
-  Download,
-  Play,
+  TrendingDown,
   ArrowRight,
-  Award,
-  Globe,
-  Lock,
+  CheckCircle2,
+  Upload,
+  Cpu,
+  FileCode,
+  Download,
+  Shield,
+  Zap,
+  Target,
+  DollarSign,
+  Users,
+  BarChart3,
+  Play,
+  Quote,
   Sparkles,
+  Calendar,
+  Building2,
   ChevronRight,
-  Mail,
-  MessageSquare,
-  X
+  FileWarning,
+  Ban,
+  Timer,
+  XCircle,
+  Scale
 } from "lucide-react";
 
-// Componente para gerar estrelas animadas
-const SpaceBackground = () => {
-  const [stars, setStars] = useState<Array<{id: number, size: string, top: string, left: string, delay: string}>>([]);
-  const [meteors, setMeteors] = useState<Array<{id: number, top: string, left: string, delay: string}>>([]);
-
-  useEffect(() => {
-    // Gerar estrelas
-    const newStars = Array.from({ length: 200 }, (_, i) => ({
-      id: i,
-      size: Math.random() > 0.8 ? 'star-large' : Math.random() > 0.6 ? 'star-medium' : 'star-small',
-      top: `${Math.random() * 200}%`,
-      left: `${Math.random() * 100}%`,
-      delay: `${Math.random() * 3}s`
-    }));
-    
-    // Gerar meteoros
-    const newMeteors = Array.from({ length: 4 }, (_, i) => ({
-      id: i,
-      top: `${Math.random() * 50}%`,
-      left: `${-10 + Math.random() * 30}%`,
-      delay: `${Math.random() * 10 + i * 3}s`
-    }));
-
-    setStars(newStars);
-    setMeteors(newMeteors);
-  }, []);
-
-  return (
-    <div className="stars-container">
-      {/* Estrelas piscantes */}
-      {stars.map((star) => (
-        <div
-          key={star.id}
-          className={`star ${star.size}`}
-          style={{
-            top: star.top,
-            left: star.left,
-            animationDelay: star.delay,
-          }}
-        />
-      ))}
-      
-      {/* Meteoros */}
-      {meteors.map((meteor) => (
-        <div
-          key={meteor.id}
-          className="meteor"
-          style={{
-            top: meteor.top,
-            left: meteor.left,
-            animationDelay: meteor.delay,
-          }}
-        />
-      ))}
-      
-      {/* Nebulosas */}
-      <div 
-        className="nebula" 
-        style={{ 
-          width: '500px', 
-          height: '500px', 
-          top: '10%', 
-          right: '5%',
-          animationDelay: '0s'
-        }} 
-      />
-      <div 
-        className="nebula" 
-        style={{ 
-          width: '350px', 
-          height: '350px', 
-          bottom: '20%', 
-          left: '10%',
-          animationDelay: '7s'
-        }} 
-      />
-      <div 
-        className="nebula" 
-        style={{ 
-          width: '400px', 
-          height: '400px', 
-          top: '60%', 
-          right: '40%',
-          animationDelay: '14s'
-        }} 
-      />
-    </div>
-  );
-};
-
 const Index = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [uploadedFile, setUploadedFile] = useState(null);
-  const [conversionComplete, setConversionComplete] = useState(false);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  
-  const [metrics, setMetrics] = useState({
-    pdfsLoaded: 1247,
-    processed: 1189,
-    successRate: 95.3,
-    timeSaved: 42.5
-  });
-
-  // Simulate real-time metrics updates
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMetrics(prev => ({
-        pdfsLoaded: prev.pdfsLoaded + Math.floor(Math.random() * 3),
-        processed: prev.processed + Math.floor(Math.random() * 2),
-        successRate: Math.min(99.9, prev.successRate + (Math.random() - 0.5) * 0.1),
-        timeSaved: prev.timeSaved + Math.random() * 0.5
-      }));
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <div className="min-h-screen space-bg text-white relative">
-      <SpaceBackground />
-
-      {/* Top Banner Espacial */}
-      <div className="relative z-10 bg-gradient-to-r from-purple-600/30 to-cyan-600/30 backdrop-blur-sm border-b border-white/10">
-        <div className="container mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm">
-            <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span className="text-white/90">
-              🚀 Economize até 50% em tempo de processamento com nossa tecnologia avançada
-            </span>
-          </div>
-          <Button variant="ghost" size="sm" className="text-white/80 hover:bg-white/10">
-            <X className="w-4 h-4" />
-          </Button>
-        </div>
-      </div>
-
-      {/* Navigation Bar Espacial */}
-      <nav className="relative z-10 bg-black/30 backdrop-blur-md border-b border-white/10">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <a href="/" title="PDF Patrimonium" aria-label="Back to home" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-purple-500 rounded-lg flex items-center justify-center shadow-lg shadow-cyan-500/25">
-                <FileText className="w-5 h-5 text-white" />
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
+        <div className="container-wide">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+                <FileCode className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="font-bold text-lg text-white">PDF Patrimonium</span>
-            </a>
-            <div className="hidden md:flex items-center gap-6 text-sm">
-              <a href="#features" className="text-white/70 hover:text-white transition-colors">Recursos</a>
-              <a href="#pricing" className="text-white/70 hover:text-white transition-colors">Preços</a>
-              <a href="#docs" className="text-white/70 hover:text-white transition-colors">Documentação</a>
-              <a href="/help" className="text-white/70 hover:text-white transition-colors">Ajuda</a>
-            </div>
-          </div>
-          <Button variant="ghost" size="sm" className="text-white/80 hover:bg-white/10" onClick={() => window.location.href = "/auth"}>
-            Entrar
-          </Button>
-        </div>
-      </nav>
-
-      {/* Hero Section Espacial */}
-      <section className="relative z-10 min-h-[90vh] flex items-center overflow-hidden">
-        <div className="container mx-auto px-6 py-20">
-          <div className="text-center max-w-6xl mx-auto">
-            <h1 className="text-6xl md:text-8xl font-bold leading-tight mb-8 animate-fade-in">
-              <span className="block text-white">Sistema PDF para</span>
-              <span className="block bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-float">
-                Conversão Avançada
+              <span className="font-display font-bold text-xl text-foreground">
+                Alivee
               </span>
+            </Link>
+
+            <nav className="hidden md:flex items-center gap-8">
+              <a href="#problema" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                O Problema
+              </a>
+              <a href="#solucao" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Solução
+              </a>
+              <a href="#beneficios" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Benefícios
+              </a>
+              <a href="#reforma" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Reforma 2026
+              </a>
+            </nav>
+
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
+                <Link to="/auth">Entrar</Link>
+              </Button>
+              <Button size="sm" className="shadow-primary" asChild>
+                <Link to="/auth">
+                  Teste Gratuito
+                  <ArrowRight className="w-4 h-4 ml-1" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 hero-pattern overflow-hidden">
+        <div className="absolute inset-0 grid-pattern opacity-50" />
+        
+        <div className="container-wide relative">
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Badge */}
+            <div className="animate-fade-in-up" style={{ animationDelay: '0ms' }}>
+              <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-sm font-medium bg-primary/10 text-primary border-primary/20 hover:bg-primary/15">
+                <Calendar className="w-3.5 h-3.5 mr-1.5" />
+                Preparado para a Reforma Tributária 2026
+              </Badge>
+            </div>
+
+            {/* Headline */}
+            <h1 className="animate-fade-in-up font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6" style={{ animationDelay: '100ms' }}>
+              Aproveite{" "}
+              <span className="text-primary bg-primary/10 px-2 rounded-lg">100%</span>{" "}
+              dos Créditos de{" "}
+              <span className="relative">
+                Serviços Tomados
+                <span className="absolute -bottom-1 left-0 w-full h-1 bg-success rounded-full" />
+              </span>
+              {" "}na Reforma Tributária
             </h1>
-            <p className="text-xl md:text-2xl text-white/80 mt-6 max-w-3xl mx-auto leading-relaxed mb-6 animate-slide-up">
-              Capacitando pequenas equipes a alcançar grandes resultados nos negócios.
+
+            {/* Subheadline */}
+            <p className="animate-fade-in-up text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10" style={{ animationDelay: '200ms' }}>
+              Convertemos notas de serviços tomados em XML automático, garantindo{" "}
+              <strong className="text-foreground">escrituração imediata</strong>,{" "}
+              <strong className="text-foreground">compliance</strong> e{" "}
+              <strong className="text-foreground">automação fiscal total</strong>.
             </p>
-            <p className="text-lg text-white/70 max-w-2xl mx-auto mb-12 animate-slide-up">
-              Uma infraestrutura completa de processamento de documentos para a próxima geração de empresas eficientes.
-            </p>
-            <p className="text-lg font-medium text-white/90 mb-10 animate-slide-up">
-              <strong>🌌 Construído para o futuro do trabalho.</strong>
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-scale-in">
-              <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white border-0 shadow-lg shadow-cyan-500/25">
-                Começar Grátis 🚀
+
+            {/* CTAs */}
+            <div className="animate-fade-in-up flex flex-col sm:flex-row gap-4 justify-center mb-12" style={{ animationDelay: '300ms' }}>
+              <Button size="lg" className="text-base px-8 shadow-primary hover:shadow-glow transition-shadow" asChild>
+                <Link to="/auth">
+                  <Sparkles className="w-5 h-5 mr-2" />
+                  Teste Gratuito
+                </Link>
               </Button>
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="text-lg px-8 py-6 border-white/30 text-white hover:bg-white/10"
-                onClick={() => window.location.href = "/auth"}
-              >
-                Falar Conosco →
+              <Button size="lg" variant="outline" className="text-base px-8 bg-card/50 backdrop-blur-sm hover:bg-card" asChild>
+                <a href="#demo">
+                  <Play className="w-5 h-5 mr-2" />
+                  Ver Demonstração
+                </a>
               </Button>
             </div>
 
-            {/* Product Screenshot Espacial */}
-            <div className="relative mx-auto max-w-5xl animate-scale-in">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-purple-500/20 border border-white/10">
-                <img 
-                  src={dashboardHero}
-                  alt="Dashboard do Sistema PDF Patrimonium"
-                  className="w-full h-auto"
-                  loading="eager"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent rounded-2xl"></div>
+            {/* Trust Indicators */}
+            <div className="animate-fade-in-up flex flex-wrap justify-center gap-6 text-sm text-muted-foreground" style={{ animationDelay: '400ms' }}>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-success" />
+                <span>Sem cartão de crédito</span>
               </div>
-              {/* Elementos decorativos */}
-              <div className="absolute -top-4 -right-4 w-8 h-8 bg-cyan-400 rounded-full blur-md opacity-60 animate-pulse"></div>
-              <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-purple-400 rounded-full blur-md opacity-60 animate-pulse"></div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-success" />
+                <span>Setup em 5 minutos</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-success" />
+                <span>Suporte especializado</span>
+              </div>
             </div>
+          </div>
 
-            {/* Achievement Badges Espaciais */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 animate-fade-in">
-              <Badge variant="secondary" className="px-4 py-2 bg-white/10 border border-white/20 text-white backdrop-blur-sm">
-                <Award className="w-4 h-4 mr-2 text-yellow-400" />
-                Melhor Ferramenta 2024
-              </Badge>
-              <Badge variant="secondary" className="px-4 py-2 bg-white/10 border border-white/20 text-white backdrop-blur-sm">
-                <Star className="w-4 h-4 mr-2 text-yellow-400" />
-                4.9★ Avaliação dos Usuários
-              </Badge>
+          {/* Hero Image */}
+          <div className="animate-fade-in-up mt-16 relative max-w-5xl mx-auto" style={{ animationDelay: '500ms' }}>
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-success/10 to-primary/20 rounded-3xl blur-2xl opacity-50" />
+            <div className="relative bg-card rounded-2xl shadow-2xl border border-border overflow-hidden">
+              <div className="flex items-center gap-2 px-4 py-3 bg-muted/50 border-b border-border">
+                <div className="w-3 h-3 rounded-full bg-destructive/80" />
+                <div className="w-3 h-3 rounded-full bg-highlight" />
+                <div className="w-3 h-3 rounded-full bg-success" />
+                <span className="ml-2 text-xs text-muted-foreground">dashboard.alivee.com.br</span>
+              </div>
+              <div className="aspect-[16/9] bg-gradient-to-br from-muted to-accent/20 flex items-center justify-center">
+                <div className="text-center p-8">
+                  <FileCode className="w-16 h-16 text-primary mx-auto mb-4 animate-float" />
+                  <p className="text-muted-foreground">Interface do Sistema - Imagem de Preview</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Value Proposition Espacial */}
-      <section className="relative z-10 py-20 bg-black/20 backdrop-blur-sm">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-              O futuro do trabalho precisa de 
-              <span className="block bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                novas ferramentas documentais
-              </span>
+      {/* Problem Section */}
+      <section id="problema" className="section-padding bg-muted/30">
+        <div className="container-wide">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <Badge variant="outline" className="mb-4">
+              <AlertTriangle className="w-3.5 h-3.5 mr-1.5 text-destructive" />
+              O Problema Atual
+            </Badge>
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Por que sua empresa está{" "}
+              <span className="text-destructive">perdendo créditos</span> tributários?
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto mb-8">
-              Pequenas equipes estão conquistando o que costumava exigir mais de 150 pessoas.
-            </p>
-            <p className="text-lg text-white/70 max-w-2xl mx-auto">
-              Estamos construindo a infraestrutura documental para impulsionar essa revolução.
+            <p className="text-lg text-muted-foreground">
+              O fluxo atual de notas de serviços tomados é ineficiente e coloca seu dinheiro em risco.
             </p>
           </div>
 
-          {/* Animated Feature Tags Espaciais */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12 animate-slide-up">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              "🔬 Validação XML Global", "📊 Comparação de Arquivos", "🛡️ Proteção contra Fraudes", 
-              "🎥 Tutoriais em Vídeo", "📚 API Bem Documentada", "⚡ Fácil de Integrar"
-            ].map((feature, index) => (
-              <Badge 
-                key={index} 
-                variant="outline" 
-                className="px-4 py-2 text-sm bg-white/10 border-white/20 text-white hover:bg-white/20 transition-colors backdrop-blur-sm"
-              >
-                {feature}
-              </Badge>
+              {
+                icon: FileWarning,
+                title: "Notas chegam apenas em PDF",
+                description: "Fornecedores enviam notas por e-mail em formato PDF, impossibilitando integração automática.",
+                color: "text-destructive"
+              },
+              {
+                icon: Ban,
+                title: "Sem captura automática",
+                description: "Não existe forma de capturar NFSe de serviços tomados automaticamente via certificado digital.",
+                color: "text-destructive"
+              },
+              {
+                icon: Users,
+                title: "Escrituração manual",
+                description: "Equipe fiscal precisa digitar manualmente cada nota, gerando alto custo operacional.",
+                color: "text-destructive"
+              },
+              {
+                icon: XCircle,
+                title: "Notas perdidas",
+                description: "PDFs esquecidos em e-mails, notas atrasadas e documentos não escriturados geram perdas.",
+                color: "text-destructive"
+              },
+              {
+                icon: Timer,
+                title: "Processos lentos",
+                description: "Fluxo manual não escala com o crescimento da empresa e gera gargalos operacionais.",
+                color: "text-destructive"
+              },
+              {
+                icon: TrendingDown,
+                title: "Perda de créditos",
+                description: "Cada nota não escriturada é dinheiro perdido em créditos tributários não aproveitados.",
+                color: "text-destructive"
+              }
+            ].map((item, index) => (
+              <Card key={index} className="hover-lift border-destructive/10 bg-card">
+                <CardContent className="p-6">
+                  <div className={`w-12 h-12 rounded-xl bg-destructive/10 flex items-center justify-center mb-4`}>
+                    <item.icon className={`w-6 h-6 ${item.color}`} />
+                  </div>
+                  <h3 className="font-semibold text-lg text-foreground mb-2">{item.title}</h3>
+                  <p className="text-muted-foreground">{item.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Solution Section */}
+      <section id="solucao" className="section-padding">
+        <div className="container-wide">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <Badge variant="outline" className="mb-4 border-success/30 bg-success/5">
+              <Zap className="w-3.5 h-3.5 mr-1.5 text-success" />
+              Nossa Solução
+            </Badge>
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Como o{" "}
+              <span className="text-primary">Alivee</span> resolve seu problema
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Transformamos PDFs de notas fiscais em XMLs padronizados em segundos, garantindo escrituração automática.
+            </p>
+          </div>
+
+          {/* Process Steps */}
+          <div className="grid md:grid-cols-5 gap-4 mb-16">
+            {[
+              { step: "01", icon: Upload, title: "Receba NFSe", description: "PDFs chegam por e-mail" },
+              { step: "02", icon: Cpu, title: "Leitura Automática", description: "IA interpreta os dados" },
+              { step: "03", icon: FileCode, title: "Gera XML", description: "Padrão nacional ABRASF" },
+              { step: "04", icon: Download, title: "Importe no ERP", description: "Integração total" },
+              { step: "05", icon: CheckCircle2, title: "Crédito Garantido", description: "Compliance em dia" }
+            ].map((item, index) => (
+              <div key={index} className="relative group">
+                <Card className="hover-lift h-full bg-gradient-to-b from-card to-accent/5 border-border/50">
+                  <CardContent className="p-6 text-center">
+                    <div className="text-xs font-bold text-primary mb-3">{item.step}</div>
+                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
+                      <item.icon className="w-7 h-7 text-primary" />
+                    </div>
+                    <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground">{item.description}</p>
+                  </CardContent>
+                </Card>
+                {index < 4 && (
+                  <div className="hidden md:block absolute top-1/2 -right-2 transform -translate-y-1/2 z-10">
+                    <ChevronRight className="w-4 h-4 text-muted-foreground/50" />
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
-          {/* Code/Features Mockup Espacial */}
-          <div className="relative mx-auto max-w-4xl animate-scale-in">
-            <div className="relative rounded-2xl overflow-hidden shadow-xl shadow-cyan-500/20 border border-white/10">
-              <img 
-                src={featuresMockup}
-                alt="Interface de recursos avançados"
-                className="w-full h-auto"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent rounded-2xl"></div>
+          {/* Feature Highlight */}
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-6">
+                Automatização completa do seu fluxo fiscal
+              </h3>
+              <div className="space-y-4">
+                {[
+                  "Interpreta qualquer layout de PDF de NFSe",
+                  "Extrai dados com precisão via inteligência artificial",
+                  "Gera XML no padrão nacional (ABRASF)",
+                  "Valida automaticamente contra regras fiscais",
+                  "Integra com qualquer ERP do mercado",
+                  "Elimina 100% da digitação manual"
+                ].map((feature, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <CheckCircle2 className="w-3 h-3 text-success" />
+                    </div>
+                    <span className="text-foreground">{feature}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-8">
+                <Button className="shadow-primary" asChild>
+                  <Link to="/conversions">
+                    Experimentar Agora
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary/10 to-success/10 rounded-3xl blur-2xl opacity-50" />
+              <Card className="relative overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="aspect-[4/3] bg-gradient-to-br from-accent/30 to-primary/5 flex items-center justify-center">
+                    <div className="text-center p-8">
+                      <div className="flex justify-center gap-4 mb-4">
+                        <FileText className="w-12 h-12 text-muted-foreground animate-pulse-slow" />
+                        <ArrowRight className="w-8 h-8 text-primary self-center" />
+                        <FileCode className="w-12 h-12 text-success animate-float" />
+                      </div>
+                      <p className="text-muted-foreground">PDF → XML Automático</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
       </section>
 
-      <main className="relative z-10 container mx-auto px-6">
-        {/* Features Section Espacial */}
-        <section className="py-20">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-              Recursos que Fazem a 
-              <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                Diferença
-              </span>
+      {/* Benefits Section */}
+      <section id="beneficios" className="section-padding bg-secondary text-secondary-foreground">
+        <div className="container-wide">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <Badge variant="secondary" className="mb-4 bg-primary-foreground/10 text-primary-foreground border-primary-foreground/20">
+              <Target className="w-3.5 h-3.5 mr-1.5" />
+              Benefícios
+            </Badge>
+            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
+              Resultados reais para sua empresa
             </h2>
-            <p className="text-xl text-white/80 max-w-2xl mx-auto">
-              Descubra por que nossa plataforma é a escolha número 1 para conversão de documentos
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="relative group hover:shadow-lg hover:shadow-cyan-500/20 transition-all duration-300 bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center mb-4 backdrop-blur-sm">
-                  <Zap className="w-6 h-6 text-cyan-400" />
-                </div>
-                <CardTitle className="text-white">⚡ Conversão Instantânea</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-white/70">
-                  Converta seus documentos em segundos com nossa tecnologia de processamento em nuvem de última geração.
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="relative group hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mb-4 backdrop-blur-sm">
-                  <Shield className="w-6 h-6 text-purple-400" />
-                </div>
-                <CardTitle className="text-white">🛡️ Segurança Total</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-white/70">
-                  Criptografia de ponta a ponta e exclusão automática garantem que seus documentos estejam sempre protegidos.
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="relative group hover:shadow-lg hover:shadow-cyan-500/20 transition-all duration-300 bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center mb-4 backdrop-blur-sm">
-                  <Globe className="w-6 h-6 text-cyan-400" />
-                </div>
-                <CardTitle className="text-white">🌐 Múltiplos Formatos</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-white/70">
-                  Suporte a mais de 15 formatos diferentes, incluindo Word, Excel, PowerPoint, imagens e muito mais.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
-        {/* Interactive Demo Section Espacial */}
-        <section className="py-20 bg-black/20 backdrop-blur-sm -mx-6 px-6">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-              🚀 Experimente Agora Mesmo
-            </h2>
-            <p className="text-xl text-white/80 max-w-2xl mx-auto">
-              Faça upload de um PDF e veja a magia acontecer em tempo real
+            <p className="text-lg opacity-80">
+              Maximize o aproveitamento de créditos com automação inteligente.
             </p>
           </div>
 
-          {/* Step 1: Upload */}
-          {currentStep === 1 && (
-            <div className="max-w-2xl mx-auto animate-fade-in">
-              <Card className="shadow-xl shadow-purple-500/20 bg-white/5 backdrop-blur-md border-white/10">
-                <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 mx-auto mb-6 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center shadow-lg shadow-cyan-500/25">
-                    <FileText className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-semibold mb-4 text-white">
-                    🌌 Faça o upload do seu PDF
-                  </h3>
-                  <p className="text-white/70 mb-8">
-                    Selecione ou arraste seu arquivo PDF para começar a conversão
-                  </p>
-                  <FileUpload 
-                    onQueueComplete={(queue) => {
-                      console.log('Fila de conversão criada:', queue.name);
-                    }}
-                  />
-                </CardContent>
-              </Card>
-            </div>
-          )}
-
-          {/* Step 2: Conversion */}
-          {currentStep === 2 && (
-            <div className="max-w-2xl mx-auto animate-fade-in">
-              <Card className="shadow-xl shadow-cyan-500/20 bg-white/5 backdrop-blur-md border-white/10">
-                <CardContent className="p-8">
-                  <div className="text-center mb-8">
-                    <div className="w-16 h-16 mx-auto mb-6 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/25">
-                      <Zap className="w-8 h-8 text-white" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: DollarSign,
+                title: "Aproveitamento máximo IBS/CBS",
+                description: "Garanta 100% dos créditos de IBS e CBS sobre serviços tomados na nova reforma.",
+                highlight: "100%"
+              },
+              {
+                icon: Shield,
+                title: "Zero notas perdidas",
+                description: "Elimine completamente o risco de notas esquecidas ou não escrituradas.",
+                highlight: "0%"
+              },
+              {
+                icon: Clock,
+                title: "Redução de 80% do tempo",
+                description: "Sua equipe fiscal focada em análise estratégica, não em digitação.",
+                highlight: "80%"
+              },
+              {
+                icon: Zap,
+                title: "Automação fiscal completa",
+                description: "Do recebimento à escrituração, tudo acontece automaticamente.",
+                highlight: "Auto"
+              },
+              {
+                icon: BarChart3,
+                title: "ROI imediato",
+                description: "Retorno sobre investimento já no primeiro mês de utilização.",
+                highlight: "1º mês"
+              },
+              {
+                icon: Users,
+                title: "Zero digitação manual",
+                description: "Elimine erros humanos e retrabalho da sua operação fiscal.",
+                highlight: "Zero"
+              }
+            ].map((benefit, index) => (
+              <Card key={index} className="bg-primary-foreground/5 border-primary-foreground/10 hover-lift">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                      <benefit.icon className="w-6 h-6 text-primary" />
                     </div>
-                    <h3 className="text-2xl font-semibold mb-4 text-white">
-                      ⚡ Configure a conversão
-                    </h3>
-                    <p className="text-white/70">
-                      Escolha o formato desejado para: <span className="font-medium text-white">{uploadedFile?.name}</span>
-                    </p>
+                    <span className="text-2xl font-bold text-primary">{benefit.highlight}</span>
                   </div>
-                  <ConversionInterface 
-                    onConversionComplete={() => {
-                      setConversionComplete(true);
-                      setCurrentStep(3);
-                    }}
-                  />
-                  <div className="mt-6 text-center">
-                    <Button 
-                      variant="ghost" 
-                      onClick={() => setCurrentStep(1)}
-                      className="text-white/70 hover:text-white hover:bg-white/10"
-                    >
-                      ← Voltar para upload
-                    </Button>
-                  </div>
+                  <h3 className="font-semibold text-lg mb-2">{benefit.title}</h3>
+                  <p className="text-sm opacity-70">{benefit.description}</p>
                 </CardContent>
               </Card>
-            </div>
-          )}
-
-          {/* Step 3: Download */}
-          {currentStep === 3 && conversionComplete && (
-            <div className="max-w-2xl mx-auto animate-fade-in">
-              <Card className="shadow-xl shadow-green-500/20 bg-white/5 backdrop-blur-md border-white/10">
-                <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 mx-auto mb-6 rounded-lg bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/25">
-                    <CheckCircle className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-semibold mb-4 text-white">
-                    ✅ Conversão concluída!
-                  </h3>
-                  <p className="text-white/70 mb-8">
-                    Seu arquivo foi convertido com sucesso. Faça o download abaixo.
-                  </p>
-                  <div className="space-y-4">
-                    <Button size="lg" className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0">
-                      <Download className="w-5 h-5 mr-2" />
-                      Download do arquivo convertido
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="w-full border-white/30 text-white hover:bg-white/10"
-                      onClick={() => {
-                        setCurrentStep(1);
-                        setUploadedFile(null);
-                        setConversionComplete(false);
-                      }}
-                    >
-                      Converter novo arquivo
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-        </section>
-
-        {/* Testimonials Espaciais */}
-        <section className="py-20">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-              💫 O que nossos clientes dizem
-            </h2>
-            <p className="text-xl text-white/80">
-              Mais de 50.000 profissionais confiam em nossa plataforma
-            </p>
+            ))}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="relative bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-white/70 mb-4">
-                  "Incrível! Economizo horas todos os dias. A qualidade da conversão é perfeita e o processo é super intuitivo."
-                </p>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-full flex items-center justify-center mr-3 backdrop-blur-sm">
-                    <Users className="w-5 h-5 text-cyan-400" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-white">Maria Silva</div>
-                    <div className="text-sm text-white/60">Advogada</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+        </div>
+      </section>
 
-            <Card className="relative bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-white/70 mb-4">
-                  "Nossa empresa aumentou a produtividade em 40%. A plataforma é essencial para nosso fluxo de trabalho."
-                </p>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full flex items-center justify-center mr-3 backdrop-blur-sm">
-                    <Award className="w-5 h-5 text-purple-400" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-white">Carlos Santos</div>
-                    <div className="text-sm text-white/60">Diretor de TI</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="relative bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-white/70 mb-4">
-                  "Segurança e velocidade em um só lugar. Não consigo mais trabalhar sem essa ferramenta incrível."
-                </p>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-full flex items-center justify-center mr-3 backdrop-blur-sm">
-                    <Lock className="w-5 h-5 text-cyan-400" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-white">Ana Costa</div>
-                    <div className="text-sm text-white/60">Contadora</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
-        {/* ROI Calculator Section Espacial */}
-        <section className="py-20 bg-black/20 backdrop-blur-sm -mx-6 px-6">
-          <ROICalculator />
-        </section>
-
-        {/* Metrics Dashboard Espacial */}
-        <section className="py-20 bg-gradient-to-r from-purple-600/10 to-cyan-600/10 backdrop-blur-sm -mx-6 px-6">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-              📊 Métricas em Tempo Real
-            </h2>
-            <p className="text-xl text-white/80">
-              Acompanhe o poder da nossa plataforma em números
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <MetricsCard
-              title="PDFs Processados"
-              value={metrics.pdfsLoaded.toLocaleString()}
-              subtitle="Total de arquivos"
-              trend="up"
-              trendValue="+12% esta semana"
-              icon={<FileText className="w-6 h-6" />}
-              delay={0}
-            />
-            <MetricsCard
-              title="Conversões Concluídas"
-              value={metrics.processed.toLocaleString()}
-              subtitle="Com sucesso"
-              trend="up"
-              trendValue="+8% esta semana"
-              icon={<CheckCircle className="w-6 h-6" />}
-              delay={100}
-            />
-            <MetricsCard
-              title="Taxa de Sucesso"
-              value={`${metrics.successRate.toFixed(1)}%`}
-              subtitle="Precisão garantida"
-              trend="up"
-              trendValue="+2.1% esta semana"
-              icon={<TrendingUp className="w-6 h-6" />}
-              delay={200}
-            />
-            <MetricsCard
-              title="Tempo Economizado"
-              value={`${metrics.timeSaved.toFixed(1)}h`}
-              subtitle="Hoje pelos usuários"
-              trend="up"
-              trendValue="+15% esta semana"
-              icon={<Clock className="w-6 h-6" />}
-              delay={300}
-            />
-          </div>
-        </section>
-
-        {/* CTA Section Espacial */}
-        <section className="py-20">
-          <Card className="bg-gradient-to-r from-purple-600/20 to-cyan-600/20 backdrop-blur-md border-white/10 shadow-xl shadow-purple-500/20">
-            <CardContent className="p-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-                🚀 Pronto para transformar seu fluxo de trabalho?
+      {/* Reform Section */}
+      <section id="reforma" className="section-padding dots-pattern">
+        <div className="container-wide">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <Badge variant="outline" className="mb-4 border-highlight/30 bg-highlight/5">
+                <Scale className="w-3.5 h-3.5 mr-1.5 text-highlight" />
+                Reforma Tributária 2026
+              </Badge>
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-6">
+                Por que a automação se tornou{" "}
+                <span className="text-primary">obrigatória</span>?
               </h2>
-              <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-                Junte-se a milhares de profissionais que já economizam horas todos os dias
+              <p className="text-lg text-muted-foreground mb-8">
+                Com a Reforma Tributária, a escrituração imediata não é mais opcional. 
+                Cada dia de atraso significa créditos perdidos definitivamente.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white border-0">
-                  Começar Gratuitamente
-                  <ChevronRight className="w-5 h-5 ml-2" />
-                </Button>
-                <Button variant="outline" size="lg" className="text-lg px-8 py-6 border-white/30 text-white hover:bg-white/10">
-                  <MessageSquare className="w-5 h-5 mr-2" />
-                  Falar com Especialista
-                </Button>
-              </div>
-              <div className="flex items-center justify-center gap-6 mt-8 text-sm text-white/70">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-400" />
-                  14 dias grátis
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-400" />
-                  Sem compromisso
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-400" />
-                  Suporte 24/7
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
 
-      </main>
-
-      {/* Newsletter Section Espacial */}
-      <section className="relative z-10 py-16 bg-black/30 backdrop-blur-sm">
-        <div className="container mx-auto px-6 text-center">
-          <h3 className="text-2xl font-bold mb-4 text-white">
-            📡 Fique por dentro das novidades
-          </h3>
-          <p className="text-white/70 mb-8 max-w-2xl mx-auto">
-            Receba dicas exclusivas, atualizações de recursos e ofertas especiais diretamente no seu email
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <div className="flex-1">
-              <input
-                type="email"
-                placeholder="Seu melhor email"
-                className="w-full px-4 py-3 rounded-lg border border-white/30 bg-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 backdrop-blur-sm"
-              />
+              <div className="space-y-6">
+                {[
+                  {
+                    title: "Escrituração imediata exigida",
+                    description: "A nova legislação exige registro instantâneo das notas para aproveitamento do crédito."
+                  },
+                  {
+                    title: "Crédito só com nota escriturada",
+                    description: "Quem deixar nota para trás perde o direito ao crédito de IBS/CBS."
+                  },
+                  {
+                    title: "Carga administrativa aumenta",
+                    description: "O volume de obrigações cresce, tornando processos manuais insustentáveis."
+                  },
+                  {
+                    title: "Multas e penalidades",
+                    description: "Atrasos na escrituração podem gerar multas e autuações fiscais."
+                  }
+                ].map((item, index) => (
+                  <div key={index} className="flex gap-4 p-4 rounded-xl bg-card border border-border hover-lift">
+                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <span className="text-sm font-bold text-primary">{index + 1}</span>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-foreground mb-1">{item.title}</h4>
+                      <p className="text-sm text-muted-foreground">{item.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white border-0">
-              <Mail className="w-5 h-5 mr-2" />
-              Inscrever
+
+            <div className="relative">
+              <Card className="bg-gradient-to-br from-primary to-primary-dark text-primary-foreground overflow-hidden">
+                <CardContent className="p-8 md:p-10">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-primary-foreground/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+                  <div className="relative">
+                    <Calendar className="w-12 h-12 mb-6 opacity-80" />
+                    <h3 className="text-2xl md:text-3xl font-bold mb-4">
+                      Janeiro de 2026
+                    </h3>
+                    <p className="text-lg opacity-90 mb-6">
+                      A Reforma Tributária entra em vigor. Sua empresa está preparada para 
+                      garantir todos os créditos de serviços tomados?
+                    </p>
+                    <div className="flex items-center gap-2 text-sm opacity-80">
+                      <Clock className="w-4 h-4" />
+                      <span>Faltam poucos meses para se adequar</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Demo Section */}
+      <section id="demo" className="section-padding bg-muted/30">
+        <div className="container-tight text-center">
+          <Badge variant="outline" className="mb-4">
+            <Play className="w-3.5 h-3.5 mr-1.5 text-primary" />
+            Demonstração
+          </Badge>
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+            Veja o sistema em ação
+          </h2>
+          <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
+            Assista como um PDF de nota fiscal é transformado em XML pronto para importação em segundos.
+          </p>
+
+          <div className="relative max-w-4xl mx-auto">
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-success/10 to-primary/20 rounded-3xl blur-2xl opacity-50" />
+            <Card className="relative overflow-hidden">
+              <CardContent className="p-0">
+                <div className="aspect-video bg-secondary flex items-center justify-center group cursor-pointer">
+                  <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center shadow-glow group-hover:scale-110 transition-transform">
+                    <Play className="w-8 h-8 text-primary-foreground ml-1" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-8">
+            <Button size="lg" className="shadow-primary" asChild>
+              <Link to="/conversions">
+                Testar Gratuitamente
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Link>
             </Button>
           </div>
-          <p className="text-xs text-white/50 mt-4">
-            Sem spam. Cancele quando quiser.
-          </p>
         </div>
       </section>
 
-      {/* Footer Espacial */}
-      <footer className="relative z-10 bg-black/40 backdrop-blur-md border-t border-white/10">
-        <div className="container mx-auto px-6 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="space-y-4">
-              <h4 className="font-semibold text-lg text-white">🌌 PDF Patrimonium</h4>
-              <p className="text-white/70 text-sm">
-                A plataforma mais avançada para conversão de documentos do Brasil.
-              </p>
-              <div className="flex items-center gap-4">
-                <SupportTicket />
-                <TicketManagement />
-              </div>
+      {/* Testimonials Section */}
+      <section className="section-padding">
+        <div className="container-wide">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <Badge variant="outline" className="mb-4">
+              <Quote className="w-3.5 h-3.5 mr-1.5 text-primary" />
+              Prova Social
+            </Badge>
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+              O que nossos clientes dizem
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                quote: "Economizamos 80% do tempo da equipe fiscal com o sistema. A automação mudou completamente nossa operação.",
+                author: "Maria Santos",
+                role: "Coordenadora Fiscal",
+                company: "Tech Solutions LTDA"
+              },
+              {
+                quote: "Eliminamos erros de digitação e garantimos 100% dos créditos. O ROI foi imediato já no primeiro mês.",
+                author: "Carlos Oliveira",
+                role: "Diretor Financeiro",
+                company: "Grupo Industrial XYZ"
+              },
+              {
+                quote: "Com a reforma tributária chegando, o Alivee nos deu a tranquilidade de estar 100% em compliance.",
+                author: "Ana Paula Costa",
+                role: "Gerente Contábil",
+                company: "Consultoria ABC"
+              }
+            ].map((testimonial, index) => (
+              <Card key={index} className="hover-lift">
+                <CardContent className="p-6">
+                  <Quote className="w-8 h-8 text-primary/20 mb-4" />
+                  <p className="text-foreground mb-6 italic">"{testimonial.quote}"</p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span className="text-sm font-bold text-primary">
+                        {testimonial.author.split(' ').map(n => n[0]).join('')}
+                      </span>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-foreground">{testimonial.author}</div>
+                      <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                      <div className="text-xs text-muted-foreground">{testimonial.company}</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="section-padding bg-gradient-to-br from-primary via-primary to-primary-dark text-primary-foreground relative overflow-hidden">
+        <div className="absolute inset-0 grid-pattern opacity-10" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-foreground/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-foreground/5 rounded-full translate-y-1/2 -translate-x-1/2" />
+        
+        <div className="container-tight relative text-center">
+          <Building2 className="w-16 h-16 mx-auto mb-6 opacity-80" />
+          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+            Prepare sua empresa para a{" "}
+            <span className="text-highlight">Reforma Tributária</span>
+          </h2>
+          <p className="text-xl opacity-90 mb-10 max-w-2xl mx-auto">
+            Comece agora e garanta 100% de aproveitamento dos créditos de IBS/CBS sobre serviços tomados.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+            <Button size="lg" variant="secondary" className="text-base px-8 bg-primary-foreground text-primary hover:bg-primary-foreground/90" asChild>
+              <Link to="/auth">
+                <Sparkles className="w-5 h-5 mr-2" />
+                Começar Teste Gratuito
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="text-base px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10" asChild>
+              <a href="mailto:contato@alivee.com.br">
+                <Users className="w-5 h-5 mr-2" />
+                Solicitar Apresentação
+              </a>
+            </Button>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-6 text-sm opacity-80">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4" />
+              <span>14 dias grátis</span>
             </div>
-            
-            <div className="space-y-4">
-              <h5 className="font-semibold text-white">Produto</h5>
-              <ul className="space-y-2 text-sm text-white/60">
-                <li><a href="#" className="hover:text-white transition-colors">Recursos</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Preços</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">API</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Integrações</a></li>
-              </ul>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4" />
+              <span>Sem cartão de crédito</span>
             </div>
-            
-            <div className="space-y-4">
-              <h5 className="font-semibold text-white">Empresa</h5>
-              <ul className="space-y-2 text-sm text-white/60">
-                <li><a href="#" className="hover:text-white transition-colors">Sobre nós</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Carreiras</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contato</a></li>
-              </ul>
-            </div>
-            
-            <div className="space-y-4">
-              <h5 className="font-semibold text-white">Suporte</h5>
-              <ul className="space-y-2 text-sm text-white/60">
-                <li><a href="#" className="hover:text-white transition-colors">Central de Ajuda</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Documentação</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Status</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Política de Privacidade</a></li>
-              </ul>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4" />
+              <span>Cancele quando quiser</span>
             </div>
           </div>
-          
-          <div className="border-t border-white/20 mt-12 pt-8 text-center">
-            <p className="text-white/60 text-sm">
-              © 2024 PDF Patrimonium. Todos os direitos reservados. 🚀 Transformando documentos com inteligência.
-            </p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 bg-secondary text-secondary-foreground">
+        <div className="container-wide">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                <FileCode className="w-4 h-4 text-primary-foreground" />
+              </div>
+              <span className="font-display font-bold text-lg">Alivee NFSe Automation</span>
+            </div>
+            
+            <div className="flex flex-wrap justify-center gap-6 text-sm opacity-80">
+              <a href="#" className="hover:opacity-100 transition-opacity">Termos de Uso</a>
+              <a href="#" className="hover:opacity-100 transition-opacity">Política de Privacidade</a>
+              <a href="#" className="hover:opacity-100 transition-opacity">Contato</a>
+            </div>
+
+            <div className="text-sm opacity-60">
+              © 2024 Alivee. Todos os direitos reservados.
+            </div>
           </div>
         </div>
       </footer>
