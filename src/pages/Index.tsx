@@ -376,19 +376,19 @@ const Index = () => {
       </section>
 
       {/* Benefits Section */}
-      <section id="beneficios" className="section-padding bg-gradient-to-br from-secondary via-secondary to-primary-dark text-secondary-foreground relative overflow-hidden">
+      <section id="beneficios" className="section-padding bg-gradient-to-br from-secondary via-secondary to-primary-dark relative overflow-hidden">
         <div className="absolute inset-0 grid-pattern opacity-5" />
         <FloatingOrbs />
         <div className="container-wide relative">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <Badge className="mb-4 bg-white/10 text-white border-white/20">
+            <Badge className="mb-4 bg-white/15 text-white border-white/30">
               <Target className="w-4 h-4 mr-2" />
               Benefícios
             </Badge>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-white">
               Resultados reais para sua empresa
             </h2>
-            <p className="text-xl opacity-70">
+            <p className="text-xl text-white/80">
               Maximize o aproveitamento de créditos com automação inteligente.
             </p>
           </div>
@@ -438,18 +438,18 @@ const Index = () => {
                 gradient: "from-success/20 to-success/10"
               }
             ].map((benefit, index) => (
-              <Card key={index} className="group bg-white/5 border-white/10 hover-lift backdrop-blur-sm overflow-hidden">
+              <Card key={index} className="group bg-white/10 border-white/20 hover-lift backdrop-blur-sm overflow-hidden">
                 <CardContent className="p-8 relative">
                   <div className={`absolute top-0 right-0 w-40 h-40 bg-gradient-to-br ${benefit.gradient} rounded-full -translate-y-1/2 translate-x-1/2 opacity-50 group-hover:scale-125 transition-transform duration-500`} />
                   <div className="relative">
                     <div className="flex items-start justify-between mb-6">
-                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/30 to-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <benefit.icon className="w-7 h-7 text-primary" />
+                      <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <benefit.icon className="w-7 h-7 text-white" />
                       </div>
-                      <span className="text-3xl font-bold text-gradient">{benefit.highlight}</span>
+                      <span className="text-3xl font-bold text-highlight">{benefit.highlight}</span>
                     </div>
-                    <h3 className="font-semibold text-xl mb-3">{benefit.title}</h3>
-                    <p className="opacity-70 leading-relaxed">{benefit.description}</p>
+                    <h3 className="font-semibold text-xl mb-3 text-white">{benefit.title}</h3>
+                    <p className="text-white/70 leading-relaxed">{benefit.description}</p>
                   </div>
                 </CardContent>
               </Card>
