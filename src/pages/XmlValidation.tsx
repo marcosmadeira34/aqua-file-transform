@@ -26,6 +26,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -819,6 +827,87 @@ const XmlValidation = () => {
               </CardContent>
             </Card>
           ) : (
+            <>
+            {/* XML Data Table */}
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Eye className="w-5 h-5" />
+                  Visão Geral dos XMLs Convertidos
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-muted/50">
+                        <TableHead className="font-semibold">Cliente</TableHead>
+                        <TableHead className="font-semibold">Nº Nota</TableHead>
+                        <TableHead className="font-semibold">Data Emissão</TableHead>
+                        <TableHead className="font-semibold">Prestador</TableHead>
+                        <TableHead className="font-semibold">CNPJ Prestador</TableHead>
+                        <TableHead className="font-semibold text-right">Valor Total</TableHead>
+                        <TableHead className="font-semibold text-center">Status</TableHead>
+                        <TableHead className="font-semibold text-center">Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {xmlFiles.map((file) => (
+                        <TableRow 
+                          key={file.id} 
+                          className={`cursor-pointer hover:bg-muted/50 ${selectedFile?.id === file.id ? 'bg-primary/10' : ''}`}
+                          onClick={() => setSelectedFile(file)}
+                        >
+                          <TableCell className="font-medium">{file.clientName}</TableCell>
+                          <TableCell>{file.xmlContent?.numero || '-'}</TableCell>
+                          <TableCell>{file.xmlContent?.dataEmissao || '-'}</TableCell>
+                          <TableCell className="max-w-[200px] truncate" title={file.xmlContent?.prestador?.razaoSocial}>
+                            {file.xmlContent?.prestador?.razaoSocial || '-'}
+                          </TableCell>
+                          <TableCell className="font-mono text-xs">
+                            {file.xmlContent?.prestador?.cnpj || '-'}
+                          </TableCell>
+                          <TableCell className="text-right font-semibold text-success">
+                            {file.xmlContent?.valorTotal || '-'}
+                          </TableCell>
+                          <TableCell className="text-center">
+                            {getStatusBadge(file.validationStatus)}
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <div className="flex items-center justify-center gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 w-7 p-0"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedFile(file);
+                                }}
+                              >
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                              {file.validationStatus === 'pendente' && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-7 w-7 p-0 text-success hover:text-success"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleValidateFile(file.id);
+                                  }}
+                                >
+                                  <CheckCircle className="w-4 h-4" />
+                                </Button>
+                              )}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Files List */}
               <Card>
@@ -986,6 +1075,7 @@ const XmlValidation = () => {
                 </CardContent>
               </Card>
             </div>
+            </>
           )}
         </div>
       )}
